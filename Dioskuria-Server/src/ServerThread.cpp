@@ -7,12 +7,16 @@
 
 #include "ServerThread.h"
 
-ServerThread::ServerThread() {
-	// TODO Auto-generated constructor stub
-
+ServerThread::ServerThread(TCPStream* passedsocket) {
+	socket = passedsocket;
+	start();
 }
 
 ServerThread::~ServerThread() {
 	// TODO Auto-generated destructor stub
 }
 
+void ServerThread::*run() {
+	std::cout << "AAA" << std::endl;
+	return NULL;
+}

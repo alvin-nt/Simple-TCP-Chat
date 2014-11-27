@@ -9,13 +9,24 @@
 #define SERVERTHREAD_H_
 
 #include "Thread/thread.h"
+#include "Protocol/TCPStream.h"
+#include "ServerClasses/User.h"
+#include "ServerClasses/Group.h"
+#include <string>
+#include "ServerClasses/Utils.h"
+
+using namespace std;
 
 class ServerThread: public Thread {
 public:
-	ServerThread();
+	ServerThread(TCPStream* passedsocket);
 	virtual ~ServerThread();
-
+	void *run();
 	//variables for single thread are here
+	string ThreadName;
+private:
+	TCPStream* socket;
+
 };
 
 #endif /* SERVERTHREAD_H_ */
