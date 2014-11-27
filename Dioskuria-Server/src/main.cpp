@@ -7,9 +7,12 @@
 
 #include "DioskuriaServer.h"
 
+using namespace std;
+
 int main() {
 	int PORT=18213;
-	new DioskuriaServer(PORT);
+	string host = "localhost";
+	DioskuriaServer* DS = new DioskuriaServer(PORT, host);
 	return 0;
 }
 

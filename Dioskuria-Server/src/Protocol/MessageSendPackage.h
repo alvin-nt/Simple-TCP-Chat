@@ -57,7 +57,7 @@ public:
 	 * @param  stream the TCPStream object
 	 * @return        number of bytes sent
 	 */
-	virtual ssize_t send(TCPStream& stream) const;
+	//virtual ssize_t MessageSendPackage::send(TCPStream& stream);
 };
 
 #endif

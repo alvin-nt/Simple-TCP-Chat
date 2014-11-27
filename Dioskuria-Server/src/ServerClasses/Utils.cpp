@@ -5,29 +5,25 @@
  *      Author: asseylum
  */
 
-#include "Utils.h"
+#include "../ServerClasses/Utils.h"
 
 using namespace std;
-
-const string logFileName = "log.txt";
 
 const string Utils::currentDateTime() {
 	    time_t     now = time(0);
 	    struct tm  tstruct;
 	    char       buf[80];
 	    tstruct = *localtime(&now);
-	    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
-	    // for more information about date/time format
 	    strftime(buf, sizeof(buf), "[%Y-%m-%d %X]", &tstruct);
 
 	    return buf;
 }
 
 void Utils::writeServerLog(string message) {
-	cout << Utils::currentDateTime() << " " << message;
+	cout << Utils::currentDateTime() << " " << message << endl;
 
 	ofstream outfile;
-	outfile.open(logFileName.c_str(), ios::app);
-	outfile << Utils::currentDateTime() << " " << message;
+	outfile.open("log.txt", ios::app);
+	outfile << Utils::currentDateTime() << " " << message << endl;
 	outfile.close();
 }

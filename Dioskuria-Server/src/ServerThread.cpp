@@ -16,7 +16,12 @@ ServerThread::~ServerThread() {
 	// TODO Auto-generated destructor stub
 }
 
-void ServerThread::*run() {
-	std::cout << "AAA" << std::endl;
+void* ServerThread::run() {
+	//TODO inisialisasi network i/o stream
+
+	while (true) {
+		//TODO main loop thread, process query by package
+	}
+
 	return NULL;
 }

@@ -9,7 +9,6 @@
 
 Group::Group() {
 	// TODO Auto-generated constructor stub
-
 }
 
 Group::~Group() {

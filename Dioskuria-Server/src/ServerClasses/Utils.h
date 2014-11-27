@@ -5,8 +5,8 @@
  *      Author: asseylum
  */
 
-#ifndef SERVERCLASSES_IO_H_
-#define SERVERCLASSES_IO_H_
+#ifndef SERVERCLASSES_UTILS_H_
+#define SERVERCLASSES_UTILS_H_
 
 #include <string>
 #include <iostream>
@@ -21,8 +21,7 @@ public:
 	static const string currentDateTime();
 	static void writeServerLog(string message);
 
-private:
-	static const string logFileName;
+
 };
 
 #endif /* SERVERCLASSES_IO_H_ */

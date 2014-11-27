@@ -9,16 +9,20 @@
 #define SRC_DIOSKURIASERVER_H_
 
 #include "ServerThread.h"
-#include "TCPAcceptor.h"
+#include "Protocol/TCPAcceptor.h"
+#include "ServerClasses/Group.h"
 #include <vector>
+
+using namespace std;
 
 class DioskuriaServer {
 public:
-	DioskuriaServer(int PORT);
+	DioskuriaServer(int PORT, string host);
 	virtual ~DioskuriaServer();
-
-	//static server wide variables here
-	static std::vector<ServerThread> ThreadPool;
 };
+
+static vector<ServerThread*> ThreadPool;
+static vector<Group> GroupList;
+
 
 #endif /* SRC_DIOSKURIASERVER_H_ */

@@ -35,7 +35,7 @@ MessageSendPackage& MessageSendPackage::operator=(const MessageSendPackage& rhs)
 	return *this;
 }
 
-ssize_t MessageSendPackage::send(TCPStream* stream) {
+/*ssize_t MessageSendPackage::send(TCPStream& stream) {
 	int packageNum = 1;
 	if(message.length() > dataSize) {
 		while(dataSize * packageNum < message.length()) {
@@ -61,4 +61,4 @@ ssize_t MessageSendPackage::send(TCPStream* stream) {
 	ssize_t sent = stream.send(buff, getPackageSize());
 
 	return sent;
-}
+}*/

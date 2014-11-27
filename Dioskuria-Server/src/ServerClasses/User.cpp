@@ -7,7 +7,9 @@
 
 #include "../ServerClasses/User.h"
 
-User::User() {
+using namespace std;
+
+User::User(string _username) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -16,3 +18,14 @@ User::~User() {
 	// TODO Auto-generated destructor stub
 }
 
+string User::getUserName() {
+	return username;
+}
+
+string User::getPassword() {
+	return password;
+}
+
+string User::queryUser() {
+	//TODO some lookup to file on user pass list
+}
