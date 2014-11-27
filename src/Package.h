@@ -5,7 +5,7 @@
 #include "TCPStream.h"
 
 class Package {
-private:
+protected:
 	static const int dataSize = 504;
 
 	int packageType;
@@ -14,11 +14,13 @@ private:
 public:
 	/**
 	 * Initializes an empty package
+	 * @param packageType the type of package, as defined in {@link Protocol}
 	 */
 	Package(int packageType);
 
 	/**
 	 * Clones a package
+	 * @param package the package going to be cloned
 	 */
 	Package(const Package& package);
 
@@ -48,7 +50,7 @@ public:
 
 	/**
 	 * Get the package's timestamp
-	 * @return package timestamp, in time_t
+	 * @return package timestamp, in {@link time_t}
 	 */
 	time_t getPackageTime() const;
 
@@ -58,6 +60,10 @@ public:
 	 */
 	const char* getDataPtr();
 
+	/**
+	 * Copies a package
+	 * @param rhs the package going to be copied
+	 */
 	Package& operator=(const Package& rhs);
 
 	/**

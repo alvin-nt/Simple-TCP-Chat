@@ -56,7 +56,8 @@ Package& Package::operator=(const Package& rhs) {
 		this->packageType = rhs.packageType;
 		this->packageTime = rhs.packageTime;
 
-		copy(rhs.data, rhs.data + Package::dataSize, this->data);
+		this->resetData();
+		copy(rhs.data, rhs.data + dataSize, this->data);
 	}
 
 	return *this;
@@ -73,7 +74,7 @@ void Package::resetTime() {
 
 void Package::resetData() {
 	if(this->data == NULL) {
-		this->data = new char[Package::getPackageSize()];
+		this->data = new char[dataSize];
 	}
 
 	memset(this->data, 0, dataSize);

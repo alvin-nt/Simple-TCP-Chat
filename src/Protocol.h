@@ -88,7 +88,7 @@ namespace Protocol {
  * the data structure is described below:
  * [userId]
  *
- * userId: the userId requesting the logout
+ * userId (int - 4 byte): the userId requesting the logout
  *
  * after this package is sent, both the client and the server should close their own sockets.
  */
@@ -102,14 +102,13 @@ namespace Protocol {
  *
  * senderId (int - 4 byte): the userId of the sender
  * receiverId (int - 4 byte): the userId of the receiver
- * receiverType (char - 1 byte): the type of receiver. 'G' for group, 'U' for user.
  * offset (char - 1 byte): '1' (0x31) indicates that there is a next packet that contains the next part of the message, 
  * 						   '0' (0x30) indicates otherwise
  * message (any - 494 byte): the message
  *
- * Since C basically operates on null-terminated string,
+ * Since C operates on null-terminated string,
  * If the last package (offset = 0) received by the receiver does not contain a null (\0),
- * the program should add it automatically.
+ * the client/server should add it automatically.
  *
  * PRO TIP:
  *  - The package should be accepted first by the server, and then the time is 'injected' by the server.
@@ -125,7 +124,6 @@ namespace Protocol {
 	static const int messageSend = 31;
 
 /**
- * TODO
  * messageNum used when a message is read by the client
  *
  * The data structure is as follows:
