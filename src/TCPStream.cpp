@@ -1,5 +1,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <cassert>
+#include <cstring>
 #include "TCPStream.h"
 #include "Package.h"
 
@@ -32,8 +34,9 @@ ssize_t TCPStream::receive(char* buff, size_t len) {
 
 Package TCPStream::receive() {
 	char buff[Package::getPackageSize()];
+	memset(buff, 0, sizeof(buff));
 
-
+	assert(receive(buff, sizeof(buff)) == sizeof(buff));
 	Package package(buff);
 
 	return package;
