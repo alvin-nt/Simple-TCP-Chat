@@ -1,4 +1,5 @@
 #include <arpa/inet.h>
+#include <unistd.h>
 #include "TCPStream.h"
 #include "Package.h"
 
@@ -17,12 +18,21 @@ TCPStream::TCPStream(const TCPStream& stream) {
 	this->m_peerPort = stream.m_peerPort;
 }
 
+ssize_t TCPStream::send(char* buff, size_t len) {
+	return write(m_sd, buff, len);
+}
+
 ssize_t TCPStream::send(const Package& package) {
 	return package.send(*this);
 }
 
+ssize_t TCPStream::receive(char* buff, size_t len) {
+	return read(m_sd, buff, len);
+}
+
 Package TCPStream::receive() {
 	char buff[Package::getPackageSize()];
+
 
 	Package package(buff);
 
