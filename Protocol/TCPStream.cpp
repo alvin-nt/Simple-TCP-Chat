@@ -1,4 +1,5 @@
 #include <arpa/inet.h>
+#include <sys/select.h>
 #include <unistd.h>
 #include <cassert>
 #include <cstring>
@@ -20,7 +21,7 @@ TCPStream::TCPStream(const TCPStream& stream) {
 	this->m_peerPort = stream.m_peerPort;
 }
 
-ssize_t TCPStream::send(char* buff, size_t len) {
+ssize_t TCPStream::send(const char* buff, size_t len) {
 	return write(m_sd, buff, len);
 }
 
@@ -28,8 +29,14 @@ ssize_t TCPStream::send(const Package& package) {
 	return package.send(*this);
 }
 
-ssize_t TCPStream::receive(char* buff, size_t len) {
-	return read(m_sd, buff, len);
+ssize_t TCPStream::receive(char* buff, size_t len, int timeout) {
+	if(timeout <= 0) {
+		return read(m_sd, buff, len);
+	} else {
+		if(waitForReadEvent(timeout)) {
+			return read(m_sd, buff, len);
+		}
+	}
 }
 
 Package TCPStream::receive() {
@@ -52,4 +59,22 @@ const string& TCPStream::getPeerIP() const {
 
 int TCPStream::getPeerPort() const {
 	return m_peerPort;
+}
+
+bool TCPStream::waitForReadEvent(int timeout)
+{
+    fd_set sdset;
+    struct timeval tv;
+
+    tv.tv_sec = timeout;
+    tv.tv_usec = 0;
+    FD_ZERO(&sdset);
+    FD_SET(m_sd, &sdset);
+
+    if (select(m_sd+1, &sdset, NULL, NULL, &tv) > 0)
+    {
+        return true;
+    }
+
+    return false;
 }

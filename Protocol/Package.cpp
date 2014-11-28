@@ -36,7 +36,7 @@ Package::~Package() {
 }
 
 int Package::getPackageSize() {
-	return dataSize + sizeof(int) + sizeof(time_t);
+	return dataSize + dataOffset;
 }
 
 int Package::getPackageType() const {

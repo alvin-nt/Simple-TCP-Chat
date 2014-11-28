@@ -11,6 +11,8 @@ protected:
 	int packageType;
 	time_t packageTime;
 	char* data;
+
+	static const int dataOffset = sizeof(packageType) + sizeof(packageTime);
 public:
 	/**
 	 * Initializes an empty package
@@ -58,7 +60,7 @@ public:
 	 * Get the pointer to package data
 	 * @return pointer to package data
 	 */
-	const char* getDataPtr();
+	virtual const char* getDataPtr();
 
 	/**
 	 * Copies a package
@@ -80,7 +82,7 @@ public:
 	/**
 	 * Clears the data
 	 */
-	void resetData();
+	virtual void resetData();
 
 	/**
 	 * Sends a package through a TCPStream object
@@ -88,6 +90,8 @@ public:
 	 * @return        number of bytes written, in POSIX standard
 	 */
 	virtual ssize_t send(TCPStream& stream) const;
+
+	static Package receive(TCPStream& stream);
 };
 
 #endif

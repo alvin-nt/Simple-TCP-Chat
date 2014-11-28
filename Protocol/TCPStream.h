@@ -40,8 +40,8 @@ public:
 	Package receive();
 
 	// wrapper for native functions
-	ssize_t send(char* buffer, size_t len);
-	ssize_t receive(char* buffer, size_t len);
+	ssize_t send(const char* buffer, size_t len);
+	ssize_t receive(char* buffer, size_t len, int timeout = 5);
 	
 	/**
 	 * Gets the IP of the peer as a std::string
@@ -58,6 +58,15 @@ private:
 	TCPStream(int sd, struct sockaddr_in* address);
 	TCPStream();
 	TCPStream(const TCPStream& stream); // TODO: cctor definition
+
+	/**
+	 * Used to wait for read to execute
+	 *
+	 * using select()
+	 * @param  timeout length of waiting
+	 * @return         true if the event is called within the timeout
+	 */
+	bool waitForReadEvent(int timeout);
 };
 
 #endif

@@ -36,10 +36,29 @@ public:
 	~TCPAcceptor();
 	
 	/**
+	 * Gets the listening port
+	 * @return m_port
+	 */
+	int getListeningPort() const;
+
+	/**
+	 * Gets the listening address
+	 * @return m_address
+	 */
+	const string& getListeningAddress() const;
+
+	/**
+	 * Checks whether the acceptor is listening
+	 * @return m_listening
+	 */
+	bool isListening() const;
+	
+	/**
 	 * Starts a connection
 	 * @return number indicating the connection stat. 0 is ok, else means something wrong's happening
 	 */
-	int			start();
+	int	start();
+
 	/**
 	 * 
 	 * @return pointer to a new TCPStream

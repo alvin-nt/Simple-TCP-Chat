@@ -13,6 +13,18 @@ TCPAcceptor::~TCPAcceptor()
 	}
 }
 
+int TCPAcceptor::getListeningPort() const {
+	return m_port;
+}
+
+const string& TCPAcceptor::getListeningAddress() const {
+	return m_address;
+}
+
+bool TCPAcceptor::isListening() const {
+	return m_listening;
+}
+
 int TCPAcceptor::start()
 {
 	int retval;
@@ -40,32 +52,40 @@ int TCPAcceptor::start()
 		if (result != 0) {
 			perror("bind() failed");
 		} else {
-			result = listen(m_lsd, 5);
+			result = listen(m_lsd, 10);
+
 			if(result != 0) {
 				perror("listen() failed");
+			} else {
+				m_listening = true;
 			}
 		}
 		
-		retval = result;	
+		retval = result;
 	}
 	
 	return retval;
 }
 
 TCPStream* TCPAcceptor::accept() {
+	TCPStream* ptr;
+
 	if (m_listening == false) {
-		return NULL;
+		ptr = NULL;
 	} else {
 		struct sockaddr_in address;
 		socklen_t len = sizeof(address);
 		memset(&address, 0, sizeof(address));
+
 		int sd = ::accept(m_lsd, (struct sockaddr*)&address, &len);
 		
 		if(sd < 0) {
 			perror("accept() failed");
-			return NULL;
+			ptr = NULL;
 		} else {
-			return new TCPStream(sd, &address);
+			ptr = new TCPStream(sd, &address);
 		}
 	}
+
+	return ptr;
 }
