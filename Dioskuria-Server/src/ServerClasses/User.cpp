@@ -115,24 +115,19 @@ void User::loadMessages() {
 	clearMessageFile();
 }
 
-void User::deleteMessageFrom(string user) {
-	string filename = username + "-messages.txt";
-	string filename2 = username + "-messages-temp.txt";
-	ifstream input(filename);
-	ofstream output(filename2);
-	string process, process2;
-	string delimiter = ";";
-	while (getline(input, process)) {
-		if (user != process.substr(0, process.find(delimiter))) {
-			output << process << endl;
+vector<string> User::getMessageFrom(string user) {
+	vector<int> temp;
+	vector<string> ret;
+	for(unsigned int i = 0; i < unseenMessage.size(); i++) {
+		if (unseenMessage.at(i).sender == user) {
+			temp.push_back(i);
+			ret.push_back(unseenMessage.at(i).message);
 		}
 	}
-	input.clear();
-	input.seekg(0,ios::beg);
-	input.close();
-	output.close();
-	remove(filename.c_str());
-	rename(filename2.c_str(),filename.c_str());
+	for (int i = 0; i < temp.size(); i++) {
+		unseenMessage.erase(unseenMessage.begin()+temp.at(i)-i);
+	}
+	return ret;
 }
 
 void User::clearMessageFile() {

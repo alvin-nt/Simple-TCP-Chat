@@ -33,8 +33,8 @@ public:
 	string login(string _username, string _password);
 	string createUser();
 	void loadMessages();
-	void deleteMessageFrom(string user);
 	void clearMessageFile();
+	vector<string> getMessageFrom(string user);
 
 
 	vector<struct QueuedMessage> unseenMessage;

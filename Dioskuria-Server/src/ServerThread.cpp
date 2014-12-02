@@ -28,7 +28,7 @@ void* ServerThread::run() {
 	while (true) {
 		//TODO main loop thread, process query by package
 
-		//if bla bla
+		//if parse signup
 			/* Signup */
 			/* Receive packet contains username password */
 				/*
@@ -38,43 +38,46 @@ void* ServerThread::run() {
 					threadName = username;
 				} else {
 					//signup fail
-				}*/
-		//else if
+				}
+				*/
+		//else if parse login
 			/* Login */
 			/* Receive packet contains username password */
-				username = "dafuq";
-				password = "string";
+				/*
 				//cin >> username >> password;
 				if(currentUser.login(username, password) == USER_LOGIN_SUCCESS) {
 					//send success login
 					threadName = username;
-					cout << USER_LOGIN_SUCCESS << endl;
 					currentUser.loadMessages();
-					for (unsigned int i = 0; i < currentUser.unseenMessage.size(); i++) {
-						struct QueuedMessage t;
-						t = currentUser.unseenMessage.at(i);
-						cout << t.sender << " sents: " << t.message << endl;
-					}
-					currentUser.unseenMessage.clear();
-					exit(0);
+					cout << USER_LOGIN_SUCCESS << endl;
 				} else {
 					//send login failed
 					cout << USER_LOGIN_INVALID << endl;
 				}
-		//else if
+				*/
+		//else if parse message
 			/* User sends message */
 			/* TODO use message processor */
-		//else if
+		//else if create group
 			/* User create group */
 			/* TODO GROUP */
-		//else if
+		//else if join group
 			/* User join group */
-		//else if
+		//else if parse leave group
 			/* User leave group */
-		//else if
+		//else if parse request message
 			/* User asks for messages */
-		//else if
+			/* TODO parse packet to string requestFor */
+				/*
+				string requestFor;
+				vector<string> messages;
+				messages = currentUser.getMessageFrom(requestFor);
+				//do some sending back to client
+				 */
+
+		//else if parse logout
 			/* Logout */
+			//break;
 
 		cout << endl << "LOOP" << endl;
 	}
