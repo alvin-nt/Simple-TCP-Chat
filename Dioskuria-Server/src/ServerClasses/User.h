@@ -32,12 +32,23 @@ public:
 	string newUser(string _username, string _password);
 	string login(string _username, string _password);
 	string createUser();
+	void loadMessages();
+	void deleteMessageFrom(string user);
+	void clearMessageFile();
 
+
+	vector<struct QueuedMessage> unseenMessage;
 private:
 	string username;
 	string password;
-	vector<string> unsentMessages;
 	//TODO add other attributes
+
+
+};
+
+struct QueuedMessage {
+	string sender;
+	string message;
 };
 
 #endif /* SERVERCLASSES_USER_H_ */

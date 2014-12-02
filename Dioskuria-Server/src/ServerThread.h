@@ -12,10 +12,12 @@
 #include "Protocol/TCPStream.h"
 #include "ServerClasses/User.h"
 #include "ServerClasses/Group.h"
-#include <string>
 #include "ServerClasses/Utils.h"
-#include <iostream>
+#include "ServerClasses/MessageProcessor.h"
 #include "Constants.h"
+#include <string>
+#include <iostream>
+
 
 using namespace std;
 

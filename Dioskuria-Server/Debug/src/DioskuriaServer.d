@@ -3,8 +3,9 @@ src/DioskuriaServer.d: ../src/DioskuriaServer.cpp \
  ../src/Protocol/TCPStream.h ../src/ServerClasses/User.h \
  ../src/ServerClasses/Utils.h ../src/ServerClasses/../Constants.h \
  ../src/ServerClasses/Group.h ../src/ServerClasses/User.h \
- ../src/ServerClasses/Utils.h ../src/Constants.h \
- ../src/Protocol/TCPAcceptor.h ../src/Protocol/TCPStream.h
+ ../src/ServerClasses/Utils.h ../src/ServerClasses/MessageProcessor.h \
+ ../src/Constants.h ../src/Protocol/TCPAcceptor.h \
+ ../src/Protocol/TCPStream.h
 
 ../src/DioskuriaServer.h:
 
@@ -25,6 +26,8 @@ src/DioskuriaServer.d: ../src/DioskuriaServer.cpp \
 ../src/ServerClasses/User.h:
 
 ../src/ServerClasses/Utils.h:
+
+../src/ServerClasses/MessageProcessor.h:
 
 ../src/Constants.h:
 

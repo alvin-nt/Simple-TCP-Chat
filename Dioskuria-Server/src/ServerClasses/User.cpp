@@ -69,6 +69,7 @@ bool User::queryUser() {
 			found = true;
 		}
 	}
+	userFile.close();
 	return found;
 }
 
@@ -86,6 +87,7 @@ string User::createUser() {
 		} else {
 			string message = "Signup failed, cannot open file";
 			Utils::writeServerLog(message);
+			outfile.close();
 			return USER_SIGNUP_FAILED;
 		}
 	} else {
@@ -93,4 +95,49 @@ string User::createUser() {
 		Utils::writeServerLog(message);
 		return USER_SIGNUP_FAILED;
 	}
+}
+
+void User::loadMessages() {
+	string filename = username + "-messages.txt";
+	ifstream input;
+	input.open(filename.c_str(), ifstream::in);
+	if (input.is_open()) {
+		string process;
+		string delimiter = ";";
+		while (getline(input, process)) {
+			struct QueuedMessage temp;
+			temp.sender = process.substr(0, process.find(delimiter));
+			temp.message = process.substr(process.find(delimiter)+1);
+			unseenMessage.push_back(temp);
+		}
+	}
+	input.close();
+	clearMessageFile();
+}
+
+void User::deleteMessageFrom(string user) {
+	string filename = username + "-messages.txt";
+	string filename2 = username + "-messages-temp.txt";
+	ifstream input(filename);
+	ofstream output(filename2);
+	string process, process2;
+	string delimiter = ";";
+	while (getline(input, process)) {
+		if (user != process.substr(0, process.find(delimiter))) {
+			output << process << endl;
+		}
+	}
+	input.clear();
+	input.seekg(0,ios::beg);
+	input.close();
+	output.close();
+	remove(filename.c_str());
+	rename(filename2.c_str(),filename.c_str());
+}
+
+void User::clearMessageFile() {
+	string filename = username + "-messages.txt";
+	ofstream output;
+	output.open(filename.c_str(), fstream::out | fstream::trunc);
+	output.close();
 }

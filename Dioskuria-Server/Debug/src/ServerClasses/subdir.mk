@@ -5,16 +5,19 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/ServerClasses/Group.cpp \
+../src/ServerClasses/MessageProcessor.cpp \
 ../src/ServerClasses/User.cpp \
 ../src/ServerClasses/Utils.cpp 
 
 OBJS += \
 ./src/ServerClasses/Group.o \
+./src/ServerClasses/MessageProcessor.o \
 ./src/ServerClasses/User.o \
 ./src/ServerClasses/Utils.o 
 
 CPP_DEPS += \
 ./src/ServerClasses/Group.d \
+./src/ServerClasses/MessageProcessor.d \
 ./src/ServerClasses/User.d \
 ./src/ServerClasses/Utils.d 
 
