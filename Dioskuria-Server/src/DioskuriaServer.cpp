@@ -11,8 +11,9 @@
 
 using namespace std;
 
-DioskuriaServer::DioskuriaServer(int PORT, string host) {
-	TCPAcceptor* ss = new TCPAcceptor(PORT, host.c_str());
+DioskuriaServer::DioskuriaServer(int PORT) {
+	/*
+	TCPAcceptor* ss = new TCPAcceptor(PORT);
 	//TODO display date time log
 	if(ss->start() != 0) {
 		Utils::writeServerLog("CANNOT BIND PORT, EXITING");
@@ -23,10 +24,14 @@ DioskuriaServer::DioskuriaServer(int PORT, string host) {
 			TCPStream* stream = ss->accept();
 			if (stream != NULL) {
 				ServerThread* st = new ServerThread(stream);
-				ThreadPool.push_back(st);
+				threadPool.push_back(st);
 			}
 			usleep(50);
 		}
+	} */
+	ServerThread* st = new ServerThread();
+	while (true) {
+		usleep(50);
 	}
 }
 

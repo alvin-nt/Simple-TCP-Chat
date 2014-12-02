@@ -14,19 +14,22 @@
 #include "ServerClasses/Group.h"
 #include <string>
 #include "ServerClasses/Utils.h"
+#include <iostream>
+#include "Constants.h"
 
 using namespace std;
 
 class ServerThread: public Thread {
 public:
+	ServerThread();
 	ServerThread(TCPStream* passedsocket);
 	virtual ~ServerThread();
 	void *run();
 	//variables for single thread are here
-	string ThreadName;
+	string threadName;
 private:
 	TCPStream* socket;
-
+	User currentUser;
 };
 
 #endif /* SERVERTHREAD_H_ */

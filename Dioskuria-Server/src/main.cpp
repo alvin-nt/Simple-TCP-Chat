@@ -11,8 +11,7 @@ using namespace std;
 
 int main() {
 	int PORT=18213;
-	string host = "localhost";
-	DioskuriaServer* DS = new DioskuriaServer(PORT, host);
+	DioskuriaServer* DS = new DioskuriaServer(PORT);
 	return 0;
 }
 

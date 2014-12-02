@@ -17,12 +17,11 @@ using namespace std;
 
 class DioskuriaServer {
 public:
-	DioskuriaServer(int PORT, string host);
+	DioskuriaServer(int PORT);
 	virtual ~DioskuriaServer();
 };
 
-static vector<ServerThread*> ThreadPool;
-static vector<Group> GroupList;
-
+static vector<ServerThread*> threadPool;
+static vector<Group> groupList;
 
 #endif /* SRC_DIOSKURIASERVER_H_ */
