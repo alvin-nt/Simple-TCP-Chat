@@ -40,31 +40,52 @@ void* ServerThread::run() {
 					//signup fail
 				}
 				*/
+
 		//else if parse login
 			/* Login */
 			/* Receive packet contains username password */
-				/*
+				username = "dafuq";
+				password = "string";
 				//cin >> username >> password;
 				if(currentUser.login(username, password) == USER_LOGIN_SUCCESS) {
 					//send success login
 					threadName = username;
 					currentUser.loadMessages();
+					if(!currentUser.unseenMessage.empty()) {
+						//notify user on new messages from who who who, TODO send via network
+						vector<string> userlist = currentUser.getUniqueSenderList();
+						cout << NEW_NOTIFICATION;
+						for (unsigned int i = 0; i < userlist.size();i++) {
+							cout << userlist.at(i) << " ";
+						}
+						cout << endl;
+					}
 					cout << USER_LOGIN_SUCCESS << endl;
+					exit(0);
 				} else {
 					//send login failed
 					cout << USER_LOGIN_INVALID << endl;
 				}
-				*/
+
+
 		//else if parse message
 			/* User sends message */
 			/* TODO use message processor */
+				/* if user is present (threadlist) then send to its queue, TODO create method in serverthread
+				 * to handle message passing to user messagequeue
+				 * else call the currentUser.dumpMessageTo(targetUser)
+				 */
+
 		//else if create group
 			/* User create group */
 			/* TODO GROUP */
+
 		//else if join group
 			/* User join group */
+
 		//else if parse leave group
 			/* User leave group */
+
 		//else if parse request message
 			/* User asks for messages */
 			/* TODO parse packet to string requestFor */
@@ -77,6 +98,7 @@ void* ServerThread::run() {
 
 		//else if parse logout
 			/* Logout */
+			//Utils::writeServerLog(username + " logged out");
 			//break;
 
 		cout << endl << "LOOP" << endl;

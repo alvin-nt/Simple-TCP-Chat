@@ -16,6 +16,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <algorithm>
 #include "../Constants.h"
 
 
@@ -35,6 +36,8 @@ public:
 	void loadMessages();
 	void clearMessageFile();
 	vector<string> getMessageFrom(string user);
+	void dumpMessageTo(string user, string message);
+	vector<string> getUniqueSenderList();
 
 
 	vector<struct QueuedMessage> unseenMessage;

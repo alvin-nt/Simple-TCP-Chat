@@ -136,3 +136,24 @@ void User::clearMessageFile() {
 	output.open(filename.c_str(), fstream::out | fstream::trunc);
 	output.close();
 }
+
+void User::dumpMessageTo(string user, string message) {
+	//do timestamp add on the caller, assemble message before calling this function
+	string filename = username + "-messages.txt";
+	ofstream outfile;
+	outfile.open(filename.c_str(), ios::app);
+	outfile << user << ";" << message << endl;
+	outfile.close();
+}
+
+vector<string> User::getUniqueSenderList() {
+	vector<string> ret;
+	for (unsigned int i = 0; i < unseenMessage.size(); i++) {
+		string send = unseenMessage.at(i).sender;
+		bool isPresent = (find(ret.begin(), ret.end(), send) != ret.end());
+		if (!isPresent) {
+			ret.push_back(unseenMessage.at(i).sender);
+		}
+	}
+	return ret;
+}
