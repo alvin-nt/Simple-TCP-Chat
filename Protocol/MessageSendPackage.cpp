@@ -1,17 +1,16 @@
 #include "MessageSendPackage.h"
 #include <cstring>
+#include <cassert>
+#include <cstdio>
+#include <cstdlib>
 
-MessageSendPackage::MessageSendPackage(int senderId, int recvId): 
+char MessageSendPackage::PACKAGE_NEXT = '1';
+char MessageSendPackage::PACKAGE_END = '0';
+size_t MessageSendPackage::maxMessageSize = dataSize - sizeof(PACKAGE_NEXT) - sizeof(senderId) - sizeof(recvId);
+size_t MessageSendPackage::messageOffset = dataOffset + sizeof(PACKAGE_NEXT) + sizeof(senderId) + sizeof(recvId);
+
+MessageSendPackage::MessageSendPackage(int senderId, int recvId, const string& message): 
  	Package(Protocol::messageSend)
-{
-	resetData();
-
-	this->senderId = senderId;
-	this->recvId = recvId;
-}
-
-MessageSendPackage::MessageSendPackage(const string& message):
-	Package(Protocol::messageSend)
 {
 	resetData();
 
@@ -21,8 +20,9 @@ MessageSendPackage::MessageSendPackage(const string& message):
 }
 
 MessageSendPackage::MessageSendPackage(const MessageSendPackage& package)
+	: Package(package)
 {
-	*this = package;
+	this->message = package.message;
 }
 
 MessageSendPackage::~MessageSendPackage()
@@ -31,11 +31,6 @@ MessageSendPackage::~MessageSendPackage()
 }
 
 void MessageSendPackage::resetData() {
-	if(data != NULL) {
-		delete data;
-		data = NULL;
-	}
-
 	senderId = 0;
 	recvId = 0;
 	message.clear();
@@ -67,7 +62,7 @@ MessageSendPackage& MessageSendPackage::operator=(const MessageSendPackage& rhs)
 	return *this;
 }
 
-ssize_t MessageSendPackage::send(TCPStream& stream) {
+ssize_t MessageSendPackage::send(TCPStream& stream) const {
 	size_t offset = 0;
 	size_t remainder = message.length();
 	ssize_t sentBytes = 0;
@@ -78,24 +73,25 @@ ssize_t MessageSendPackage::send(TCPStream& stream) {
 
 		bool end = (remainder < maxMessageSize);
 
+		size_t copySize;
+
 		if(!end) {
 			sprintf(buff, "%d%d%c%d%d", 
 					packageType, (int)packageTime, '1', senderId, recvId);
+			copySize = maxMessageSize;
 		} else {
 			sprintf(buff, "%d%d%c%d%d", 
 					packageType, (int)packageTime, '0', senderId, recvId);
+			copySize = remainder + 1;
 		}
 
 		// copy the string
-		size_t copiedChars = memcpy(&messagePackages[i][dataOffset], 
-									&message.c_str()[offset], 
-									end ? remainder + 1 : maxMessageSize);
-		assert(copiedChars > 0);
+		memcpy(&buff[dataOffset], &message.c_str()[offset], copySize);
 
 		sentBytes += stream.send(buff, sizeof(buff));
 
-		offset += copiedChars;
-		remainder -= copiedChars;
+		offset += copySize;
+		remainder -= copySize;
 	}
 
 	return sentBytes;
@@ -106,7 +102,7 @@ MessageSendPackage* MessageSendPackage::receive(TCPStream& stream) {
 
 	char buff[getPackageSize()];
 
-	receivePackage(buff);
+	stream.receive(buff, sizeof(buff));
 
 	// read params
 	int packageType;
@@ -116,7 +112,7 @@ MessageSendPackage* MessageSendPackage::receive(TCPStream& stream) {
 	int recvId;
 
 	sscanf(buff, "%d%d%c%d%d",
-			&packageType, &packageTime, &offset, &senderId, &recvId);
+			&packageType, (int*)&packageTime, &offset, &senderId, &recvId);
 	string message;
 
 	if(packageType == Protocol::messageSend) {
@@ -125,10 +121,10 @@ MessageSendPackage* MessageSendPackage::receive(TCPStream& stream) {
 
 		message += string(&buff[messageOffset], maxMessageSize);
 		while(offset == PACKAGE_NEXT) {
-			receivePackage(buff);
+			stream.receive(buff, sizeof(buff));
 
 			sscanf(buff, "%d%d%c%d%d",
-					&packageType, &packageTime, &offset, &senderId, &recvId);
+					&packageType, (int*)&packageTime, &offset, &senderId, &recvId);
 
 			assert(newPackage->packageType == packageType);
 			assert(newPackage->packageTime == packageTime);

@@ -27,8 +27,12 @@ void ClientThreadExample::threadRoutine() {
 		memset(buff, 0, sizeof(buff));
 
 		try {
-			stream->receive(buff, sizeof(buff));
+			cout << "Listening for package" << endl;
+			stream->receive(buff, sizeof(buff), 0);
+
 			Package tempPackage = buff;
+			cout << "Package type: " << tempPackage.getPackageType() << endl;
+			cout << "Package time: " << tempPackage.getPackageTime() << endl;
 
 			// filter based on packageType
 			switch(tempPackage.getPackageType()) {

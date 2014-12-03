@@ -43,16 +43,26 @@ ssize_t TCPStream::send(const Package& package) {
 ssize_t TCPStream::receive(char* buff, size_t len, int timeoutSec, int flags) {
 	ssize_t recvBytes = -1;
 
+	cout << "Params"
+		 << "sdNum  : " << m_sd
+		 << "buffPtr: " << buff << endl
+		 << "buffLen: " << len << endl
+		 << "timeout: " << timeoutSec << endl
+		 << "flags: " << flags << endl;
+
 	if(timeoutSec <= 0) { // no error checking
 		recvBytes = recv(m_sd, buff, len, flags);
 	} else {
 		int waitEvent = waitForReadEvent(timeoutSec);
+
+		cout << "Wait event: " << waitEvent << endl;
+
 		if(waitEvent >= 0) {
 			recvBytes = recv(m_sd, buff, len, flags);
 			if(recvBytes == 0)
-				throw SocketException("Server disconnected: no data received.");
+				throw SocketException("Stream error: no data received.");
 		} else { // something grave wrong happens
-			throw SocketException("Connection error: select() returns " + waitEvent);
+			throw SocketException("Stream error: select() returns " + waitEvent);
 		}
 	}
 
@@ -61,6 +71,23 @@ ssize_t TCPStream::receive(char* buff, size_t len, int timeoutSec, int flags) {
 	return recvBytes;
 }
 
+int TCPStream::waitForReadEvent(int timeout)
+{
+	// fileDescriptor for socket, to check for READ event
+    fd_set sdset;
+    struct timeval tv;
+
+    memset(&tv, 0, sizeof(tv));
+    tv.tv_sec = timeout;
+    tv.tv_usec = 0;
+
+    FD_ZERO(&sdset);
+    FD_SET(m_sd, &sdset);
+
+    int selectVal = select(m_sd+1, &sdset, NULL, NULL, &tv);
+
+   	return selectVal;
+}
 
 Package TCPStream::receive() {
 	char buff[Package::getPackageSize()];
@@ -82,19 +109,4 @@ const string& TCPStream::getPeerIP() const {
 
 int TCPStream::getPeerPort() const {
 	return m_peerPort;
-}
-
-int TCPStream::waitForReadEvent(int timeout)
-{
-	// fileDescriptor for socket, to check for READ event
-    fd_set sdset;
-    struct timeval tv;
-
-    tv.tv_sec = timeout;
-    tv.tv_usec = 0;
-
-    FD_ZERO(&sdset);
-    FD_SET(m_sd, &sdset);
-
-   	return select(m_sd+1, &sdset, NULL, NULL, &tv);
 }

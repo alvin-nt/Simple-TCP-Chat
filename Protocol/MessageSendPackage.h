@@ -10,8 +10,8 @@ using std::string;
 class MessageSendPackage : public Package
 {
 protected:
-	static char PACKAGE_NEXT = '1';
-	static char PACKAGE_END = '0';
+	static char PACKAGE_NEXT;
+	static char PACKAGE_END;
 	/**
 	 * userId of the sender
 	 */
@@ -30,23 +30,16 @@ protected:
 	/**
 	 * maximum message size supported by ONE MessageSendPackage object
 	 */
-	static int maxMessageSize = dataSize - sizeof(PACKAGE_NEXT) - sizeof(senderId) - sizeof(recvId);
-	static int messageOffset = dataOffset + sizeof(PACKAGE_NEXT) + sizeof(senderId) + sizeof(recvId);
+	static size_t maxMessageSize;
+	static size_t messageOffset;
 public:
-	/**
-	 * Default constructor
-	 * @param senderId the userId of the sender
-	 * @param recvId the userId of the receiver
-	 */
-	MessageSendPackage(int senderId, int recvId);
-
 	/**
 	 * Initializes the object with a message
 	 * @param senderId the userId of the sender
 	 * @param recvId the userId of the receiver
 	 * @param message the message
 	 */
-	MessageSendPackage(int senderId, int recvId, const string& message);
+	MessageSendPackage(int senderId, int recvId, const string& message = "");
 
 	/**
 	 * Clones the package
