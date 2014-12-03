@@ -297,6 +297,18 @@ namespace Protocol {
  * message (char - 500 byte): the message, NULL terminated, explaining the reason
  */
 	static const int groupChangeMasterFail = 72;
+
+/**
+ * messageNum used to send ping
+ * Scope: all
+ */
+ 	static const int pingSend = 101;
+
+/**
+ * messageNum used to acknowledge ping
+ * Scope: all
+ */
+ 	static const int pingReceive = 102;
 };
 
 #endif

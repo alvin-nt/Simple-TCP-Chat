@@ -1,10 +1,15 @@
+#include <iostream>
+#include <vector>
+#include <future>
+#include <chrono>
+#include <thread>
+#include <cstring>
+
 #include "TCPStream.h"
 #include "TCPAcceptor.h"
 #include "Package.h"
-
-#include <iostream>
-#include <vector>
-#include <thread>
+#include "SocketException.h"
+#include "ClientThreadExample.h"
 
 using namespace std;
 
@@ -12,7 +17,7 @@ void listenInput();
 
 static TCPAcceptor acceptor(10000, "localhost");
 
-static vector<TCPStream*> clients;
+static vector<ClientThreadExample> clients;
 
 bool programExit;
 
@@ -23,6 +28,10 @@ int main()
 
 	thread inputListener(listenInput);
 
+	promise<bool> p;
+	// get the future object
+	auto future = p.get_future();
+
 	if(start == 0) {
 		cout << "Server listening on " 
 			 << acceptor.getListeningAddress() << ":" << acceptor.getListeningPort() << endl;
@@ -30,7 +39,7 @@ int main()
 			TCPStream* client = acceptor.accept();
 
 			if(client != NULL) {
-				clients.push_back(client);
+				clients.push_back(ClientThreadExample(client));
 			} else {
 				cerr << "NULL client received!" << endl;
 			}
@@ -39,34 +48,59 @@ int main()
 		cerr << "Error code: " << start << endl;
 	}
 
-	for(TCPStream* client: clients) {
-		delete client;
-	}
 	clients.clear();
+
+	// check the inputListener thread
+	// get the thread status after 0.1s
+	auto status = future.wait_for(chrono::milliseconds(100));
+
+	if(status == std::future_status::ready) {
+		// thread is complete
+	} else {
+		// thread is still running
+		cout << "Press [Enter] to exit..";
+	}
+	
+	inputListener.join();
 
 	return 0;
 }
 
 void listenInput() {
 	string cmd, message;
+	char buff[512];
 
 	while(!programExit) {
+		memset(buff, 0, sizeof(buff));
 		cin >> cmd;
 
 		if(cmd == "exit") {
-			message = "serverExit";
-			programExit = true;
+			if(!programExit) {
+				message = "serverExit";
+				programExit = true;
+			}
 		} else if(cmd == "echo") {
-			cin >> message;
+			if(!programExit) {
+				cin >> message;
+				copy(message.begin(), message.end(), buff);
+			}
 		} else {
-			cerr << "unknown command: " << cmd << endl;
+			if(!programExit)
+				cerr << "unknown command: " << cmd << endl;
 		}
 
 		if(!message.empty()) {
-			cout << "Sending message:" << message << endl;
+			cout << "Sending message: " << message << endl;
 
-			for(TCPStream* client: clients) {
-				client->send(message.c_str(), message.length());
+			for(auto it = clients.begin(); it != clients.end(); it++) {
+				int sentBytes = 0;
+				try {
+					sentBytes = it->send(buff, sizeof(buff));
+					
+					cout << "Sent " << sentBytes << " bytes to " << it->getPort() << endl;
+				} catch (SocketException& e) {
+					cerr << "Caught SocketException from port " << it->getPort() << ": " << e.what() << endl;
+				}
 			}
 		}
 
