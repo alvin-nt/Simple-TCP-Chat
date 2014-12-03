@@ -39,7 +39,10 @@ int main()
 			TCPStream* client = acceptor.accept();
 
 			if(client != NULL) {
-				clients.push_back(ClientThreadExample(client));
+				ClientThreadExample clientThread(client);
+				clientThread.start();
+
+				clients.push_back(std::move(clientThread));
 			} else {
 				cerr << "NULL client received!" << endl;
 			}

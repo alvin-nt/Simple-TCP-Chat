@@ -32,15 +32,32 @@ public:
 	// let the elements be accessed from outside by other classes
 	friend class TCPAcceptor;
 	friend class TCPConnector;
-	
+
 	~TCPStream();
-	
+
 	// package functions
 	ssize_t send(const Package& package);
 	Package receive();
 
 	// wrapper for native functions
+	/**
+	 * Sends some data through the stream
+	 * @param  buffer the pointer to buffer
+	 * @param  len    length of buffer
+	 * @param  flags  connection flags
+	 * @throw		  {@link SocketException}
+	 * @return        number of bytes written
+	 */
 	ssize_t send(const char* buffer, size_t len, int flags = 0);
+
+	/**
+	 * Receives some data through the stream
+	 * @param  buffer     pointer to buffer
+	 * @param  len        length of buffer
+	 * @param  timeoutSec timeout
+	 * @param  flags      connection flags
+	 * @return            number of bytes read
+	 */
 	ssize_t receive(char* buffer, size_t len, int timeoutSec = 5, int flags = 0);
 
 	/**
@@ -64,17 +81,9 @@ private:
 	 *
 	 * using select()
 	 * @param  timeout length of waiting
-	 * @return         true if the event is called within the timeout
+	 * @return         value from select()
 	 */
-	bool waitForReadEvent(int timeout);
-
-	/**
-	 * Sends a ping to the destination, and wait for response
-	 * @param	timeout the time required for the ping to timeout
-	 * @return true if the target responds, 
-	 *         false if no response is caught within the timeout frame
-	 */
-	bool sendPing(int timeout);
+	int waitForReadEvent(int timeout);
 };
 
 #endif

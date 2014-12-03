@@ -21,11 +21,11 @@ public:
 
 	bool isRunning() const;
 
+	void start();
+
 	ssize_t send(const Package&);
 
 	ssize_t send(const char*, int);
-
-	void start();
 
 	int getPort() const;
 private:
