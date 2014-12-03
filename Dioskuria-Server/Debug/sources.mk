@@ -23,7 +23,8 @@ C_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-Thread \
-. \
-ServerClasses \
+src \
+src/Thread \
+src/ServerClasses \
+src/Protocol \
 
