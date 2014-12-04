@@ -16,7 +16,7 @@
 class Group;
 class ServerThread;
 static std::vector<ServerThread*> threadPool;
-static std::vector<Group> groupList;
+static std::vector<Group*> groupList;
 
 
 

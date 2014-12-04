@@ -41,7 +41,7 @@ bool Group::createGroup(User user, string name) {
 		Utils::writeServerLog("Group "+name+" already exists!");
 		return false;
 	} else {
-		Group tem(name);
+		Group *tem = new Group(name);
 		groupListMutex.lock();
 		groupList.push_back(tem);
 		groupFileMutex.lock();
@@ -51,22 +51,24 @@ bool Group::createGroup(User user, string name) {
 		groupFile << name << endl;
 		groupFileMutex.unlock();
 		Utils::writeServerLog("Group "+name+" created");
-		tem.joinGroup(user);
+		tem->joinGroup(user);
 		groupListMutex.unlock();
 		return true;
 	}
 }
 bool Group::isGroupExists(string name) {
-	groupListMutex.lock();
+	groupFileMutex.lock();
 	bool found = false;
-	cout << groupList.size() << endl;
-	for (unsigned int i = 0;i < groupList.size();i++) {
-		if (groupList.at(i).getGroupName() == name) {
+	string filename = "GroupList.txt";
+	ifstream file;
+	file.open(filename.c_str(), ifstream::in);
+	string process;
+	while (getline(file, process) && !found) {
+		if(process == name) {
 			found = true;
-			break;
 		}
 	}
-	groupListMutex.unlock();
+	groupFileMutex.unlock();
 	return found;
 }
 

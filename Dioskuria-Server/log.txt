@@ -98,3 +98,22 @@
 [2014-12-05 00:07:07] dafuq logged in
 [2014-12-05 00:07:07] Group GANGSTA created
 [2014-12-05 00:07:07] dafuq joined GANGSTA
+[2014-12-05 00:14:32] dafuq logged in
+[2014-12-05 00:14:32] Group GANGSTA created
+[2014-12-05 00:14:32] dafuq joined GANGSTA
+[2014-12-05 00:14:35] dafuq logged in
+[2014-12-05 00:14:35] Group GANGSTA created
+[2014-12-05 00:14:35] dafuq joined GANGSTA
+[2014-12-05 00:14:36] dafuq logged in
+[2014-12-05 00:14:36] Group GANGSTA created
+[2014-12-05 00:14:36] dafuq joined GANGSTA
+[2014-12-05 00:14:38] dafuq logged in
+[2014-12-05 00:14:38] Group GANGSTA created
+[2014-12-05 00:14:38] dafuq joined GANGSTA
+[2014-12-05 00:15:01] dafuq logged in
+[2014-12-05 00:15:01] Group GANGSTA created
+[2014-12-05 00:15:01] dafuq joined GANGSTA
+[2014-12-05 00:18:05] dafuq logged in
+[2014-12-05 00:18:05] Group GANGSTA already exists!
+[2014-12-05 00:18:10] dafuq logged in
+[2014-12-05 00:18:10] Group GANGSTA already exists!

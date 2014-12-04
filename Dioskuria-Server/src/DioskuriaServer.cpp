@@ -16,7 +16,7 @@ DioskuriaServer::DioskuriaServer(int PORT) {
 
 	groupListMutex.lock();
 	for (unsigned int i = 0; i < groupList.size(); i++) {
-		cout << "GROUP NAME: " << i << " " << groupList.at(i).getGroupName() <<endl;
+		cout << "GROUP NAME: " << i << " " << groupList.at(i)->getGroupName() <<endl;
 	}
 	groupListMutex.unlock();
 	/*
@@ -51,7 +51,7 @@ void DioskuriaServer::loadGroupList() {
 	string process;
 	while (getline(groupFile, process)) {
 		Group *tem = new Group(process);
-		groupList.push_back(*tem);
+		groupList.push_back(tem);
 	}
 	groupListMutex.unlock();
 	groupFileMutex.unlock();
