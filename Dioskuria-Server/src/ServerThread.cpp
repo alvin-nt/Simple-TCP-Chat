@@ -52,8 +52,11 @@ void* ServerThread::run() {
 					currentUser.loadMessages();
 					checkNotification();
 					cout << USER_LOGIN_SUCCESS << endl;
-					Group::createGroup(currentUser, "DAFUQ");
-					groupList.at(3)->leaveGroup(currentUser);
+					Group* temp;
+					temp = Group::getGroup("red-dot");
+					if(temp != NULL) {
+						temp->broadcast(currentUser,"WOY!");
+					}
 					break;
 				} else {
 					//send login failed
@@ -126,4 +129,8 @@ void ServerThread::checkNotification(){
 		}
 		cout << endl;
 	}
+}
+
+void ServerThread::acceptMessage(struct Message what) {
+	currentUser.unseenMessage.push_back(what);
 }

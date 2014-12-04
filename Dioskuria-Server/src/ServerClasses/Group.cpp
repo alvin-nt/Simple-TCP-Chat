@@ -159,3 +159,38 @@ bool Group::checkMembership(User user) {
 	groupListMutex.unlock();
 	return found;
 }
+
+void Group::broadcast(User broadcaster, string message) {
+	Utils::writeServerLog(broadcaster.getUserName()+" messages "+groupName);
+	for(unsigned int i = 0 ; i < members.size(); i++) {
+		if(members.at(i).getUserName() != broadcaster.getUserName()) {
+			if(isUserOnline(members.at(i))) {
+				threadPoolMutex.lock();
+				for(unsigned int j = 0; j < threadPool.size();j++) {
+					if(threadPool.at(j)->threadName == members.at(i).getUserName()) {
+						struct Message temp;
+						temp.sender = groupName;
+						temp.message = Utils::currentDateTime()+" "+broadcaster.getUserName()+" : "+message;
+						threadPool.at(j)->acceptMessage(temp);
+						break;
+					}
+				}
+				threadPoolMutex.unlock();
+			} else {
+				string msg = broadcaster.getUserName()+" : "+message;
+				members.at(i).dumpMessageTo(groupName,msg);
+			}
+		}
+	}
+}
+
+Group* Group::getGroup(string name) {
+	groupListMutex.lock();
+	for(unsigned int i = 0; i < groupList.size();i++) {
+		if(groupList.at(i)->getGroupName() == name) {
+			return groupList.at(i);
+		}
+	}
+	return NULL;
+	groupListMutex.unlock();
+}

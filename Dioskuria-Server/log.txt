@@ -1,5 +1,2 @@
-[2014-12-05 01:54:40] dafuq logged in
-[2014-12-05 01:54:40] Group DAFUQ created
-[2014-12-05 01:54:40] dafuq joined DAFUQ
-[2014-12-05 01:54:40] dafuq left DAFUQ
-[2014-12-05 01:54:40] DAFUQ has zero member, deleting group
+[2014-12-05 02:39:26] dafuq logged in
+[2014-12-05 02:39:26] dafuq messages red-dot

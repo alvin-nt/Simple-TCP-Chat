@@ -12,11 +12,14 @@
 
 #include "ServerThread.h"
 #include "ServerClasses/Group.h"
+#include "ServerClasses/User.h"
 
 class Group;
 class ServerThread;
 extern std::vector<ServerThread*> threadPool;
 extern std::vector<Group*> groupList;
+
+extern bool isUserOnline(User user);
 
 
 

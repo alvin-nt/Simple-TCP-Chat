@@ -26,6 +26,7 @@ public:
 	vector<User> getMembers();
 	static bool createGroup(User user, string name);
 	static bool isGroupExists(string name);
+	static Group* getGroup(string name);
 	void joinGroup(User user);
 	void leaveGroup(User user);
 	void broadcast(User broadcaster,string message);

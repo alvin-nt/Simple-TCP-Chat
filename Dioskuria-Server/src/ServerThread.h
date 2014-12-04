@@ -30,6 +30,8 @@ public:
 	void *run();
 	void checkNotification();
 
+	void acceptMessage(struct Message what);
+
 	//variables for single thread are here
 	string threadName;
 private:

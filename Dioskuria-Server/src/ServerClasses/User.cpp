@@ -136,13 +136,12 @@ void User::clearMessageFile() {
 	remove(filename.c_str());
 }
 
-void User::dumpMessageTo(string user, string message) {
-	//do timestamp add on the caller, assemble message before calling this function
+void User::dumpMessageTo(string fromUser, string message) {
 	messageFileMutex.lock();
 	string filename = username + "-messages.txt";
 	ofstream outfile;
 	outfile.open(filename.c_str(), ios::app);
-	outfile << user << ";" << message << endl;
+	outfile << fromUser << ";" << Utils::currentDateTime()+" "+message << endl;
 	outfile.close();
 	messageFileMutex.unlock();
 }
