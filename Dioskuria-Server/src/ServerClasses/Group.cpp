@@ -22,7 +22,6 @@ Group::Group(string name){
 	while(getline(aGroupFile,process)) {
 		User *tem = new User(process,"GROUP");
 		members.push_back(*tem);
-		cout << "Member name: " << process << endl;
 	}
 	aGroupFile.close();
 }

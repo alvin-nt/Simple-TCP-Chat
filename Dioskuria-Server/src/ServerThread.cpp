@@ -32,17 +32,22 @@ void* ServerThread::run() {
 			/* Receive packet contains username password */
 				/*
 				cin >> username >> password;
-				if (currentUser.newUser(username, password) == USER_SIGNUP_SUCCESS) {
-					//send signup success
-					threadName = username;
-				} else {
+				if(Group::isGroupExists(username)) {
 					//signup fail
+					cout << "IT IS GROUP NAME" << endl;
+				} else {
+					if (currentUser.newUser(username, password) == USER_SIGNUP_SUCCESS) {
+						//send signup success
+						threadName = username;
+					} else {
+						//signup fail
+					}
 				}
-				break;
 				*/
 		//else if parse login
 			/* Login */
 			/* Receive packet contains username password */
+		/*
 				username = "dafuq";
 				password = "string";
 				//cin >> username >> password;
@@ -58,7 +63,7 @@ void* ServerThread::run() {
 					//send login failed
 					cout << USER_LOGIN_INVALID << endl;
 				}
-
+*/
 		//else if parse message
 			/* User sends message */
 			/* TODO use message processor */

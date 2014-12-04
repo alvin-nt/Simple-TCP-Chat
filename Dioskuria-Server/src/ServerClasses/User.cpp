@@ -36,14 +36,8 @@ string User::newUser(string _username, string _password) {
 	username = _username;
 	password = _password;
 	bool isUserExist = queryUser();
-	bool isGroupName = Group::isGroupExists(username);
 	if (isUserExist) {
 		string message = username + " already exists!";
-		Utils::writeServerLog(message);
-		return USER_SIGNUP_FAILED;
-	}
-	else if (isGroupName) {
-		string message = username + " is a group name, use another!";
 		Utils::writeServerLog(message);
 		return USER_SIGNUP_FAILED;
 	}

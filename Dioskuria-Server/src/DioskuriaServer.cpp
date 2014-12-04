@@ -13,13 +13,6 @@ using namespace std;
 
 DioskuriaServer::DioskuriaServer(int PORT) {
 	loadGroupList();
-
-	groupListMutex.lock();
-	for (unsigned int i = 0; i < groupList.size(); i++) {
-		cout << "GROUP NAME: " << i << " " << groupList.at(i)->getGroupName() <<endl;
-	}
-	groupListMutex.unlock();
-	/*
 	TCPAcceptor* ss = new TCPAcceptor(PORT);
 	if(ss->start() != 0) {
 		Utils::writeServerLog("CANNOT BIND PORT, EXITING");
@@ -32,11 +25,8 @@ DioskuriaServer::DioskuriaServer(int PORT) {
 				ServerThread* st = new ServerThread(stream);
 				threadPool.push_back(st);
 			}
-			usleep(50);
 		}
-	} */
-	ServerThread* st = new ServerThread();
-	st->join();
+	}
 }
 
 DioskuriaServer::~DioskuriaServer() {
