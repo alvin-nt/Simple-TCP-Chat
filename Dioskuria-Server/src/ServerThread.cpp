@@ -52,6 +52,7 @@ void* ServerThread::run() {
 					currentUser.loadMessages();
 					checkNotification();
 					cout << USER_LOGIN_SUCCESS << endl;
+					Group::createGroup(currentUser, "DAFUQ");
 					groupList.at(3)->leaveGroup(currentUser);
 					break;
 				} else {

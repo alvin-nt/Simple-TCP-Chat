@@ -107,8 +107,11 @@ void Group::leaveGroup(User user) {
 	remove(filename.c_str());
 	rename(filename2.c_str(),filename.c_str());
 
+	Utils::writeServerLog(user.getUserName()+" left "+groupName);
+
 	//check for empty group
 	if(members.size() == 0) {
+		Utils::writeServerLog(groupName+" has zero member, deleting group");
 		groupFileMutex.lock();
 		string filename = "GroupList.txt";
 		string filename2 = "GroupList.temp";
@@ -117,7 +120,7 @@ void Group::leaveGroup(User user) {
 		ofstream output(filename2);
 		string process;
 		while (getline(input, process)) {
-			if (user.getUserName() != process) {
+			if (groupName != process) {
 				output << process << endl;
 			}
 		}
