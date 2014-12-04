@@ -12,9 +12,10 @@
 using namespace std;
 
 DioskuriaServer::DioskuriaServer(int PORT) {
+	loadGroupList();
+	cout << "GROUP 1: " << groupList.at(0).getGroupName() << endl;
 	/*
 	TCPAcceptor* ss = new TCPAcceptor(PORT);
-	//TODO display date time log
 	if(ss->start() != 0) {
 		Utils::writeServerLog("CANNOT BIND PORT, EXITING");
 		exit(1);
@@ -36,3 +37,15 @@ DioskuriaServer::DioskuriaServer(int PORT) {
 DioskuriaServer::~DioskuriaServer() {
 }
 
+void DioskuriaServer::loadGroupList() {
+	groupFileMutex.lock();
+	string groupFileName = "GroupList.txt";
+	ifstream groupFile;
+	groupFile.open(groupFileName.c_str(), ifstream::in);
+	string process;
+	while (getline(groupFile, process)) {
+		Group *tem = new Group(process);
+		groupList.push_back(*tem);
+	}
+	groupFileMutex.unlock();
+}

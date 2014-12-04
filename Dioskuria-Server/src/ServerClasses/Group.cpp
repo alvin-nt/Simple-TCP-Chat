@@ -7,11 +7,33 @@
 
 #include "../ServerClasses/Group.h"
 
+using namespace std;
+
 Group::Group() {
-	// TODO Auto-generated constructor stub
+
+}
+
+Group::Group(string name){
+	groupName = name;
+	string fileName = "group-" + name;
+	ifstream aGroupFile;
+	aGroupFile.open(fileName.c_str(), ifstream::in);
+	string process;
+	while(getline(aGroupFile,process)) {
+		User *tem = new User(process,"GROUP");
+		members.push_back(*tem);
+		cout << "Member name: " << process << endl;
+	}
 }
 
 Group::~Group() {
-	// TODO Auto-generated destructor stub
 }
+
+string Group::getGroupName() {
+	return groupName;
+}
+vector<User> Group::getMembers(){
+	return members;
+}
+
 

@@ -20,7 +20,6 @@ ServerThread::ServerThread(TCPStream* passedsocket) {
 }
 
 ServerThread::~ServerThread() {
-	// TODO Auto-generated destructor stub
 }
 
 void* ServerThread::run() {
@@ -28,11 +27,11 @@ void* ServerThread::run() {
 	string username,password;
 	while (true) {
 		//TODO main loop thread, process query by package
-
+		break;
 		//if parse signup
 			/* Signup */
 			/* Receive packet contains username password */
-
+				/*
 				cin >> username >> password;
 				if (currentUser.newUser(username, password) == USER_SIGNUP_SUCCESS) {
 					//send signup success
@@ -41,7 +40,7 @@ void* ServerThread::run() {
 					//signup fail
 				}
 				break;
-
+				*/
 		//else if parse login
 			/* Login */
 			/* Receive packet contains username password */

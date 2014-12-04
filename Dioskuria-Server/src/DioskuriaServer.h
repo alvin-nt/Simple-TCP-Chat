@@ -19,6 +19,7 @@ class DioskuriaServer {
 public:
 	DioskuriaServer(int PORT);
 	virtual ~DioskuriaServer();
+	void loadGroupList();
 };
 
 static vector<ServerThread*> threadPool;

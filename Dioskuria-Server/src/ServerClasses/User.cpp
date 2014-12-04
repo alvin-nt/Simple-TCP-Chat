@@ -102,7 +102,7 @@ void User::loadMessages() {
 		string process;
 		string delimiter = ";";
 		while (getline(input, process)) {
-			struct QueuedMessage temp;
+			struct Message temp;
 			temp.sender = process.substr(0, process.find(delimiter));
 			temp.message = process.substr(process.find(delimiter)+1);
 			unseenMessage.push_back(temp);

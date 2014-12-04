@@ -16,6 +16,7 @@ using namespace std;
 static mutex logFileMutex;
 static mutex userFileMutex;
 static mutex messageFileMutex;
+static mutex groupFileMutex;
 
 
 

@@ -38,7 +38,7 @@ public:
 	vector<string> getUniqueSenderList();
 
 
-	vector<struct QueuedMessage> unseenMessage;
+	vector<struct Message> unseenMessage;
 private:
 	string username;
 	string password;
@@ -51,7 +51,7 @@ private:
 
 };
 
-struct QueuedMessage {
+struct Message {
 	string sender;
 	string message;
 };
