@@ -27,7 +27,6 @@ void* ServerThread::run() {
 	string username,password;
 	while (true) {
 		//TODO main loop thread, process query by package
-		break;
 		//if parse signup
 			/* Signup */
 			/* Receive packet contains username password */
@@ -44,7 +43,7 @@ void* ServerThread::run() {
 		//else if parse login
 			/* Login */
 			/* Receive packet contains username password */
-				/*username = "dafuq";
+				username = "dafuq";
 				password = "string";
 				//cin >> username >> password;
 				if(currentUser.login(username, password) == USER_LOGIN_SUCCESS) {
@@ -61,12 +60,12 @@ void* ServerThread::run() {
 						cout << endl;
 					}
 					cout << USER_LOGIN_SUCCESS << endl;
+					Group::createGroup(currentUser,"GANGSTA");
 					break;
 				} else {
 					//send login failed
 					cout << USER_LOGIN_INVALID << endl;
 				}
-				*/
 
 		//else if parse message
 			/* User sends message */

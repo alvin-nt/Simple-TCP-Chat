@@ -13,7 +13,12 @@ using namespace std;
 
 DioskuriaServer::DioskuriaServer(int PORT) {
 	loadGroupList();
-	cout << "GROUP 1: " << groupList.at(0).getGroupName() << endl;
+
+	groupListMutex.lock();
+	for (unsigned int i = 0; i < groupList.size(); i++) {
+		cout << "GROUP NAME: " << i << " " << groupList.at(i).getGroupName() <<endl;
+	}
+	groupListMutex.unlock();
 	/*
 	TCPAcceptor* ss = new TCPAcceptor(PORT);
 	if(ss->start() != 0) {
@@ -38,6 +43,7 @@ DioskuriaServer::~DioskuriaServer() {
 }
 
 void DioskuriaServer::loadGroupList() {
+	groupListMutex.lock();
 	groupFileMutex.lock();
 	string groupFileName = "GroupList.txt";
 	ifstream groupFile;
@@ -47,5 +53,8 @@ void DioskuriaServer::loadGroupList() {
 		Group *tem = new Group(process);
 		groupList.push_back(*tem);
 	}
+	groupListMutex.unlock();
 	groupFileMutex.unlock();
 }
+
+

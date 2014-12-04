@@ -13,10 +13,12 @@
 using namespace std;
 
 
-static mutex logFileMutex;
-static mutex userFileMutex;
-static mutex messageFileMutex;
-static mutex groupFileMutex;
+extern mutex logFileMutex;
+extern mutex userFileMutex;
+extern mutex messageFileMutex;
+extern mutex groupFileMutex;
+extern mutex thisGroupFileMutex;
+extern mutex groupListMutex;
 
 
 

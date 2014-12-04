@@ -15,6 +15,7 @@
 #include "ServerClasses/Utils.h"
 #include "ServerClasses/MessageProcessor.h"
 #include "Constants.h"
+#include "globals.h"
 #include <string>
 #include <iostream>
 

@@ -6,18 +6,21 @@
 CPP_SRCS += \
 ../src/ServerClasses/Group.cpp \
 ../src/ServerClasses/MessageProcessor.cpp \
+../src/ServerClasses/Mutexes.cpp \
 ../src/ServerClasses/User.cpp \
 ../src/ServerClasses/Utils.cpp 
 
 OBJS += \
 ./src/ServerClasses/Group.o \
 ./src/ServerClasses/MessageProcessor.o \
+./src/ServerClasses/Mutexes.o \
 ./src/ServerClasses/User.o \
 ./src/ServerClasses/Utils.o 
 
 CPP_DEPS += \
 ./src/ServerClasses/Group.d \
 ./src/ServerClasses/MessageProcessor.d \
+./src/ServerClasses/Mutexes.d \
 ./src/ServerClasses/User.d \
 ./src/ServerClasses/Utils.d 
 

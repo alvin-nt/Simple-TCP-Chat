@@ -13,6 +13,7 @@
 #include <fstream>
 #include "User.h"
 #include "Mutexes.h"
+#include "../globals.h"
 
 using namespace std;
 
@@ -23,14 +24,17 @@ public:
 	virtual ~Group();
 	string getGroupName();
 	vector<User> getMembers();
+	static bool createGroup(User user, string name);
+	static bool isGroupExists(string name);
 	void joinGroup(User user);
-	void createGroup(User user);
 	void leaveGroup(User user);
-
+	void broadcast(User broadcaster,string message);
 
 private:
 	string groupName;
 	vector<User> members;
+
+
 };
 
 #endif /* SERVERCLASSES_GROUP_H_ */

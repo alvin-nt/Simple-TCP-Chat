@@ -10,7 +10,7 @@
 
 #include "ServerThread.h"
 #include "Protocol/TCPAcceptor.h"
-#include "ServerClasses/Group.h"
+#include "globals.h"
 #include <vector>
 
 using namespace std;
@@ -21,9 +21,6 @@ public:
 	virtual ~DioskuriaServer();
 	void loadGroupList();
 };
-
-static vector<ServerThread*> threadPool;
-static vector<Group> groupList;
 
 
 #endif /* SRC_DIOSKURIASERVER_H_ */
