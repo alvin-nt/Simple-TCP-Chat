@@ -29,11 +29,11 @@ public:
 	void joinGroup(User user);
 	void leaveGroup(User user);
 	void broadcast(User broadcaster,string message);
+	bool checkMembership(User user);
 
 private:
 	string groupName;
 	vector<User> members;
-
 
 };
 

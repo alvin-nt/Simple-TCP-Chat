@@ -57,18 +57,15 @@ bool Group::createGroup(User user, string name) {
 	}
 }
 bool Group::isGroupExists(string name) {
-	groupFileMutex.lock();
+	groupListMutex.lock();
 	bool found = false;
-	string filename = "GroupList.txt";
-	ifstream file;
-	file.open(filename.c_str(), ifstream::in);
-	string process;
-	while (getline(file, process) && !found) {
-		if(process == name) {
+	for (unsigned int i = 0 ; i < groupList.size(); i++) {
+		if (groupList.at(i)->getGroupName() == name) {
 			found = true;
+			break;
 		}
 	}
-	groupFileMutex.unlock();
+	groupListMutex.unlock();
 	return found;
 }
 
@@ -83,3 +80,79 @@ void Group::joinGroup(User user) {
 	Utils::writeServerLog(user.getUserName()+" joined "+groupName);
 }
 
+void Group::leaveGroup(User user) {
+	thisGroupFileMutex.lock();
+	groupListMutex.lock();
+	for(unsigned i = 0; i < members.size(); i++) {
+		if (members.at(i).getUserName() == user.getUserName()) {
+			members.erase(members.begin()+i);
+			break;
+		}
+	}
+
+	string filename = "group-" + groupName + ".txt";
+	string filename2 = "group-" + groupName + ".temp";
+	ifstream input(filename);
+	ofstream output(filename2);
+	string process;
+	while (getline(input, process)) {
+		if (user.getUserName() != process) {
+			output << process << endl;
+		}
+	}
+	input.clear();
+	input.seekg(0,ios::beg);
+	input.close();
+	output.close();
+	remove(filename.c_str());
+	rename(filename2.c_str(),filename.c_str());
+
+	//check for empty group
+	if(members.size() == 0) {
+		groupFileMutex.lock();
+		string filename = "GroupList.txt";
+		string filename2 = "GroupList.temp";
+		string filename3 = "group-" + groupName + ".txt";
+		ifstream input(filename);
+		ofstream output(filename2);
+		string process;
+		while (getline(input, process)) {
+			if (user.getUserName() != process) {
+				output << process << endl;
+			}
+		}
+		input.clear();
+		input.seekg(0,ios::beg);
+		input.close();
+		output.close();
+		remove(filename.c_str());
+		rename(filename2.c_str(),filename.c_str());
+		remove(filename3.c_str());
+
+		for(unsigned int i = 0; i < groupList.size(); i++) {
+			if (groupList.at(i)->getGroupName() == groupName) {
+				groupList.erase(groupList.begin()+i);
+				break;
+			}
+		}
+
+		groupFileMutex.unlock();
+	}
+
+	thisGroupFileMutex.unlock();
+	groupListMutex.unlock();
+
+}
+
+bool Group::checkMembership(User user) {
+	groupListMutex.lock();
+	bool found = false;
+	for(unsigned i = 0; i < members.size(); i++) {
+		if (members.at(i).getUserName() == user.getUserName()) {
+			found = true;
+			break;
+		}
+	}
+	groupListMutex.unlock();
+	return found;
+}

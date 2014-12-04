@@ -19,6 +19,7 @@ extern mutex messageFileMutex;
 extern mutex groupFileMutex;
 extern mutex thisGroupFileMutex;
 extern mutex groupListMutex;
+extern mutex threadPoolMutex;
 
 
 

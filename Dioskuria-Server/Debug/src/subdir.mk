@@ -6,16 +6,19 @@
 CPP_SRCS += \
 ../src/DioskuriaServer.cpp \
 ../src/ServerThread.cpp \
+../src/globals.cpp \
 ../src/main.cpp 
 
 OBJS += \
 ./src/DioskuriaServer.o \
 ./src/ServerThread.o \
+./src/globals.o \
 ./src/main.o 
 
 CPP_DEPS += \
 ./src/DioskuriaServer.d \
 ./src/ServerThread.d \
+./src/globals.d \
 ./src/main.d 
 
 

@@ -50,17 +50,9 @@ void* ServerThread::run() {
 					//send success login
 					threadName = username;
 					currentUser.loadMessages();
-					if(!currentUser.unseenMessage.empty()) {
-						//notify user on new messages from who who who, TODO send via network
-						vector<string> userlist = currentUser.getUniqueSenderList();
-						cout << NEW_NOTIFICATION;
-						for (unsigned int i = 0; i < userlist.size();i++) {
-							cout << userlist.at(i) << " ";
-						}
-						cout << endl;
-					}
+					checkNotification();
 					cout << USER_LOGIN_SUCCESS << endl;
-					Group::createGroup(currentUser,"GANGSTA");
+					groupList.at(3)->leaveGroup(currentUser);
 					break;
 				} else {
 					//send login failed
@@ -78,12 +70,29 @@ void* ServerThread::run() {
 		//else if create group
 			/* User create group */
 			/* TODO GROUP */
+				//Proto
+				/*
+				 Group::createGroup(currentUser, "name");
+				 */
 
 		//else if join group
 			/* User join group */
+				//Proto
+				/*
+				 Group::isGroupExists(name);
+				 getgroupnum;
+				 group.joinGroup(currentUser);
+				 */
 
 		//else if parse leave group
 			/* User leave group */
+				//Proto
+				/*
+				grouplookup;
+				if(group.checkMembership(currentUser)) {
+					group.leaveGroup(currentUser);
+				}
+				 */
 
 		//else if parse request message
 			/* User asks for messages */
@@ -104,4 +113,16 @@ void* ServerThread::run() {
 	}
 
 	return NULL;
+}
+
+void ServerThread::checkNotification(){
+	if(!currentUser.unseenMessage.empty()) {
+		//notify user on new messages from who who who, TODO send via network
+		vector<string> userlist = currentUser.getUniqueSenderList();
+		cout << NEW_NOTIFICATION;
+		for (unsigned int i = 0; i < userlist.size();i++) {
+			cout << userlist.at(i) << " ";
+		}
+		cout << endl;
+	}
 }

@@ -133,6 +133,7 @@ void User::clearMessageFile() {
 	ofstream output;
 	output.open(filename.c_str(), fstream::out | fstream::trunc);
 	output.close();
+	remove(filename.c_str());
 }
 
 void User::dumpMessageTo(string user, string message) {

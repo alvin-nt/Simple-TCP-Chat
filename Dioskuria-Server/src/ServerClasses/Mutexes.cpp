@@ -15,3 +15,4 @@ mutex messageFileMutex;
 mutex groupFileMutex;
 mutex thisGroupFileMutex;
 mutex groupListMutex;
+mutex threadPoolMutex;

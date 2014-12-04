@@ -28,6 +28,8 @@ public:
 	ServerThread(TCPStream* passedsocket);
 	virtual ~ServerThread();
 	void *run();
+	void checkNotification();
+
 	//variables for single thread are here
 	string threadName;
 private:

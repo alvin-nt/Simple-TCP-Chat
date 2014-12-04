@@ -15,8 +15,9 @@
 
 class Group;
 class ServerThread;
-static std::vector<ServerThread*> threadPool;
-static std::vector<Group*> groupList;
+extern std::vector<ServerThread*> threadPool;
+extern std::vector<Group*> groupList;
+
 
 
 
