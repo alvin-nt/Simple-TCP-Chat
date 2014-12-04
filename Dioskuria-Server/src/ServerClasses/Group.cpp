@@ -24,6 +24,7 @@ Group::Group(string name){
 		members.push_back(*tem);
 		cout << "Member name: " << process << endl;
 	}
+	aGroupFile.close();
 }
 
 Group::~Group() {
@@ -49,6 +50,7 @@ bool Group::createGroup(User user, string name) {
 		ofstream groupFile;
 		groupFile.open(fileName.c_str(),ofstream::app);
 		groupFile << name << endl;
+		groupFile.close();
 		groupFileMutex.unlock();
 		Utils::writeServerLog("Group "+name+" created");
 		tem->joinGroup(user);
@@ -76,6 +78,7 @@ void Group::joinGroup(User user) {
 	ofstream thisGroupFile;
 	thisGroupFile.open(fileName.c_str(),ofstream::app);
 	thisGroupFile << user.getUserName() << endl;
+	thisGroupFile.close();
 	thisGroupFileMutex.unlock();
 	Utils::writeServerLog(user.getUserName()+" joined "+groupName);
 }
@@ -178,7 +181,7 @@ void Group::broadcast(User broadcaster, string message) {
 				threadPoolMutex.unlock();
 			} else {
 				string msg = broadcaster.getUserName()+" : "+message;
-				members.at(i).dumpMessageTo(groupName,msg);
+				broadcaster.dumpMessageTo(groupName,members.at(i).getUserName(),msg);
 			}
 		}
 	}

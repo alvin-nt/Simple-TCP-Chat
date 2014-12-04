@@ -36,11 +36,18 @@ string User::newUser(string _username, string _password) {
 	username = _username;
 	password = _password;
 	bool isUserExist = queryUser();
+	bool isGroupName = Group::isGroupExists(username);
 	if (isUserExist) {
 		string message = username + " already exists!";
 		Utils::writeServerLog(message);
 		return USER_SIGNUP_FAILED;
-	} else {
+	}
+	else if (isGroupName) {
+		string message = username + " is a group name, use another!";
+		Utils::writeServerLog(message);
+		return USER_SIGNUP_FAILED;
+	}
+	else {
 		string ret = createUser();
 		return ret;
 	}
@@ -136,12 +143,22 @@ void User::clearMessageFile() {
 	remove(filename.c_str());
 }
 
-void User::dumpMessageTo(string fromUser, string message) {
+void User::dumpMessageTo(string user, string message) {
 	messageFileMutex.lock();
-	string filename = username + "-messages.txt";
+	string filename = user + "-messages.txt";
 	ofstream outfile;
 	outfile.open(filename.c_str(), ios::app);
-	outfile << fromUser << ";" << Utils::currentDateTime()+" "+message << endl;
+	outfile << username << ";" << Utils::currentDateTime()+" "+message << endl;
+	outfile.close();
+	messageFileMutex.unlock();
+}
+
+void User::dumpMessageTo(string groupname,string user, string message) {
+	messageFileMutex.lock();
+	string filename = user + "-messages.txt";
+	ofstream outfile;
+	outfile.open(filename.c_str(), ios::app);
+	outfile << groupname << ";" << Utils::currentDateTime()+" "+message << endl;
 	outfile.close();
 	messageFileMutex.unlock();
 }
@@ -156,4 +173,22 @@ vector<string> User::getUniqueSenderList() {
 		}
 	}
 	return ret;
+}
+
+bool User::isUserExists(string user) {
+	userFileMutex.lock();
+	bool exists = false;
+	string fileName = "UserDatabase.txt";
+	ifstream userFile;
+	userFile.open(fileName.c_str(), ifstream::in);
+	string process;
+	string delimiter = ";";
+	while (getline(userFile, process) && !exists) {
+		if (process.substr(0, process.find(delimiter)) == user) {
+			exists = true;
+		}
+	}
+	userFile.close();
+	userFileMutex.unlock();
+	return exists;
 }

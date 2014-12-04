@@ -52,11 +52,7 @@ void* ServerThread::run() {
 					currentUser.loadMessages();
 					checkNotification();
 					cout << USER_LOGIN_SUCCESS << endl;
-					Group* temp;
-					temp = Group::getGroup("red-dot");
-					if(temp != NULL) {
-						temp->broadcast(currentUser,"WOY!");
-					}
+
 					break;
 				} else {
 					//send login failed
@@ -70,7 +66,39 @@ void* ServerThread::run() {
 				 * to handle message passing to user messagequeue
 				 * else call the currentUser.dumpMessageTo(targetUser)
 				 */
-
+				/*string name;
+				string msg;
+				//msg = currentUser.getUserName() + " : " + message;
+				bool isGroupName = Group::isGroupExists(name);
+				if (isGroupName) {
+					Group* temp;
+					temp = Group::getGroup("red-dot");
+					if(temp != NULL) {
+						temp->broadcast(currentUser,msg);
+					}
+				} else { //to user
+					if(User::isUserExists(name)) {
+						Utils::writeServerLog(currentUser.getUserName()+" messages "+name);
+						if(isUserOnline(name)) {
+							threadPoolMutex.lock();
+							for(unsigned int i = 0; i < threadPool.size(); i++) {
+								if (threadPool.at(i)->threadName == name) {
+									struct Message ms;
+									ms.sender = currentUser.getUserName;
+									ms.message = msg;
+									threadPool.at(i)->acceptMessage(ms);
+									break;
+								}
+							}
+							threadPoolMutex.unlock();
+						} else {
+							currentUser.dumpMessageTo(name, msg);
+						}
+					} else {
+						//send it does not exist
+					}
+				}
+				*/
 		//else if create group
 			/* User create group */
 			/* TODO GROUP */

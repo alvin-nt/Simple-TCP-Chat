@@ -53,6 +53,7 @@ void DioskuriaServer::loadGroupList() {
 		Group *tem = new Group(process);
 		groupList.push_back(tem);
 	}
+	groupFile.close();
 	groupListMutex.unlock();
 	groupFileMutex.unlock();
 }
