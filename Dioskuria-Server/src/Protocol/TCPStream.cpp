@@ -1,15 +1,23 @@
 #include <arpa/inet.h>
-#include <unistd.h>
+#include <sys/select.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+
+#include <exception>
 #include <cassert>
 #include <cstring>
+#include <iostream>
+
 #include "TCPStream.h"
 #include "Package.h"
+#include "SocketException.h"
 
 TCPStream::TCPStream(int sd, struct sockaddr_in* address) {
 	char ip[50];
 	inet_ntop(PF_INET, (struct in_addr*)&(address->sin_addr.s_addr),
 							ip, sizeof(ip)-1);
-	
+
+	m_sd = sd;
 	m_peerIP = ip;
 	m_peerPort = ntohs(address->sin_port);
 }
@@ -20,16 +28,65 @@ TCPStream::TCPStream(const TCPStream& stream) {
 	this->m_peerPort = stream.m_peerPort;
 }
 
-ssize_t TCPStream::send(char* buff, size_t len) {
-	return write(m_sd, buff, len);
+ssize_t TCPStream::send(const char* buff, size_t len, int flags) {
+	int sent = ::send(m_sd, buff, len, flags);
+	
+	cout << "Sent " << sent << " bytes" << endl;
+
+	return sent;
 }
 
 ssize_t TCPStream::send(const Package& package) {
 	return package.send(*this);
 }
 
-ssize_t TCPStream::receive(char* buff, size_t len) {
-	return read(m_sd, buff, len);
+ssize_t TCPStream::receive(char* buff, size_t len, int timeoutSec, int flags) {
+	ssize_t recvBytes = -1;
+
+	cout << "Params"
+		 << "sdNum  : " << m_sd
+		 << "buffPtr: " << buff << endl
+		 << "buffLen: " << len << endl
+		 << "timeout: " << timeoutSec << endl
+		 << "flags: " << flags << endl;
+
+	if(timeoutSec <= 0) { // no error checking
+		recvBytes = recv(m_sd, buff, len, flags);
+	} else {
+		int waitEvent = waitForReadEvent(timeoutSec);
+
+		cout << "Wait event: " << waitEvent << endl;
+
+		if(waitEvent >= 0) {
+			recvBytes = recv(m_sd, buff, len, flags);
+			if(recvBytes == 0)
+				throw SocketException("Stream error: no data received.");
+		} else { // something grave wrong happens
+			throw SocketException("Stream error: select() returns " + waitEvent);
+		}
+	}
+
+	cout << "Received " << recvBytes << " bytes" << endl;
+
+	return recvBytes;
+}
+
+int TCPStream::waitForReadEvent(int timeout)
+{
+	// fileDescriptor for socket, to check for READ event
+    fd_set sdset;
+    struct timeval tv;
+
+    memset(&tv, 0, sizeof(tv));
+    tv.tv_sec = timeout;
+    tv.tv_usec = 0;
+
+    FD_ZERO(&sdset);
+    FD_SET(m_sd, &sdset);
+
+    int selectVal = select(m_sd+1, &sdset, NULL, NULL, &tv);
+
+   	return selectVal;
 }
 
 Package TCPStream::receive() {

@@ -29,12 +29,10 @@ public:
 	virtual ~User();
 	string getUserName();
 	string getPassword();
-	bool queryUser();
 	string newUser(string _username, string _password);
 	string login(string _username, string _password);
 	string createUser();
 	void loadMessages();
-	void clearMessageFile();
 	vector<string> getMessageFrom(string user);
 	void dumpMessageTo(string user, string message);
 	vector<string> getUniqueSenderList();
@@ -45,6 +43,10 @@ private:
 	string username;
 	string password;
 	//TODO add other attributes
+
+
+	bool queryUser();
+	void clearMessageFile();
 
 
 };

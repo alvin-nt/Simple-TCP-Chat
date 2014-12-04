@@ -10,6 +10,7 @@
 using namespace std;
 
 ServerThread::ServerThread() {
+	socket = NULL;
 	start();
 }
 
@@ -31,7 +32,7 @@ void* ServerThread::run() {
 		//if parse signup
 			/* Signup */
 			/* Receive packet contains username password */
-				/*
+
 				cin >> username >> password;
 				if (currentUser.newUser(username, password) == USER_SIGNUP_SUCCESS) {
 					//send signup success
@@ -39,12 +40,12 @@ void* ServerThread::run() {
 				} else {
 					//signup fail
 				}
-				*/
+				break;
 
 		//else if parse login
 			/* Login */
 			/* Receive packet contains username password */
-				username = "dafuq";
+				/*username = "dafuq";
 				password = "string";
 				//cin >> username >> password;
 				if(currentUser.login(username, password) == USER_LOGIN_SUCCESS) {
@@ -61,12 +62,12 @@ void* ServerThread::run() {
 						cout << endl;
 					}
 					cout << USER_LOGIN_SUCCESS << endl;
-					exit(0);
+					break;
 				} else {
 					//send login failed
 					cout << USER_LOGIN_INVALID << endl;
 				}
-
+				*/
 
 		//else if parse message
 			/* User sends message */

@@ -24,4 +24,5 @@ public:
 static vector<ServerThread*> threadPool;
 static vector<Group> groupList;
 
+
 #endif /* SRC_DIOSKURIASERVER_H_ */

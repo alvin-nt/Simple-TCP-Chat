@@ -10,7 +10,8 @@ protected:
 
 	int packageType;
 	time_t packageTime;
-	char* data;
+
+	static const int dataOffset = sizeof(packageType) + sizeof(packageTime);
 public:
 	/**
 	 * Initializes an empty package
@@ -49,22 +50,30 @@ public:
 	int getPackageType() const;
 
 	/**
+	 * Set the type of package
+	 * @param messageNum the packageType, as defined in the protocol
+	 */
+	void setPackageType(int messageNum);
+
+	/**
 	 * Get the package's timestamp
 	 * @return package timestamp, in {@link time_t}
 	 */
 	time_t getPackageTime() const;
 
 	/**
-	 * Get the pointer to package data
-	 * @return pointer to package data
-	 */
-	const char* getDataPtr();
-
-	/**
 	 * Copies a package
 	 * @param rhs the package going to be copied
+	 * @return self-reference
 	 */
 	Package& operator=(const Package& rhs);
+
+	/**
+	 * Assigns the values in the package based on a char buffer
+	 * @param buff the char buffer
+	 * @return self-reference
+	 */
+	Package& operator=(const char* buff);
 
 	/**
 	 * Clears a package, and resets the time
@@ -80,7 +89,7 @@ public:
 	/**
 	 * Clears the data
 	 */
-	void resetData();
+	virtual void resetData();
 
 	/**
 	 * Sends a package through a TCPStream object
@@ -88,6 +97,8 @@ public:
 	 * @return        number of bytes written, in POSIX standard
 	 */
 	virtual ssize_t send(TCPStream& stream) const;
+
+	//static Package receive(TCPStream& stream);
 };
 
 #endif

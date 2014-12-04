@@ -20,10 +20,12 @@ const string Utils::currentDateTime() {
 }
 
 void Utils::writeServerLog(string message) {
+	logFileMutex.lock();
 	cout << Utils::currentDateTime() << " " << message << endl;
 
 	ofstream outfile;
 	outfile.open("log.txt", ios::app);
 	outfile << Utils::currentDateTime() << " " << message << endl;
 	outfile.close();
+	logFileMutex.unlock();
 }

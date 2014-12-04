@@ -19,11 +19,9 @@ User::User(string _username, string _password) {
 }
 
 User::~User() {
-	// TODO Auto-generated destructor stub
 }
 
 string User::login(string _username, string _password) {
-	//TODO pengecekan password dan log
 	username = _username;
 	bool res = queryUser();
 	if (res && (password == _password)) {
@@ -35,15 +33,16 @@ string User::login(string _username, string _password) {
 }
 
 string User::newUser(string _username, string _password) {
-	//TODO pengecekan user exist dan log
 	username = _username;
 	password = _password;
-	if (queryUser()) {
+	bool isUserExist = queryUser();
+	if (isUserExist) {
 		string message = username + " already exists!";
 		Utils::writeServerLog(message);
 		return USER_SIGNUP_FAILED;
 	} else {
-		return createUser();
+		string ret = createUser();
+		return ret;
 	}
 }
 
@@ -56,7 +55,7 @@ string User::getPassword() {
 }
 
 bool User::queryUser() {
-	//TODO some lookup to file on user pass list, add mutex
+	userFileMutex.lock();
 	fstream userFile;
 	bool found = false;
 	userFile.open("UserDatabase.txt", fstream::in | fstream::out | fstream::app);
@@ -70,34 +69,32 @@ bool User::queryUser() {
 		}
 	}
 	userFile.close();
+	userFileMutex.unlock();
 	return found;
 }
 
 string User::createUser() {
-	//TODO some mutex
-	if (!queryUser()) {
-		ofstream outfile;
-		outfile.open("UserDatabase.txt", ios::app);
-		if (outfile.is_open()) {
-			outfile << username << ";" << password << endl;
-			outfile.close();
-			string message = username + " successfully signed up!";
-			Utils::writeServerLog(message);
-			return USER_SIGNUP_SUCCESS;
-		} else {
-			string message = "Signup failed, cannot open file";
-			Utils::writeServerLog(message);
-			outfile.close();
-			return USER_SIGNUP_FAILED;
-		}
+	userFileMutex.lock();
+	ofstream outfile;
+	outfile.open("UserDatabase.txt", ios::app);
+	if (outfile.is_open()) {
+		outfile << username << ";" << password << endl;
+		outfile.close();
+		userFileMutex.unlock();
+		string message = username + " successfully signed up!";
+		Utils::writeServerLog(message);
+		return USER_SIGNUP_SUCCESS;
 	} else {
-		string message = "Signup failed, user already exist";
+		outfile.close();
+		userFileMutex.unlock();
+		string message = "Signup failed, cannot open file";
 		Utils::writeServerLog(message);
 		return USER_SIGNUP_FAILED;
 	}
 }
 
 void User::loadMessages() {
+	messageFileMutex.lock();
 	string filename = username + "-messages.txt";
 	ifstream input;
 	input.open(filename.c_str(), ifstream::in);
@@ -113,6 +110,7 @@ void User::loadMessages() {
 	}
 	input.close();
 	clearMessageFile();
+	messageFileMutex.unlock();
 }
 
 vector<string> User::getMessageFrom(string user) {
@@ -139,11 +137,13 @@ void User::clearMessageFile() {
 
 void User::dumpMessageTo(string user, string message) {
 	//do timestamp add on the caller, assemble message before calling this function
+	messageFileMutex.lock();
 	string filename = username + "-messages.txt";
 	ofstream outfile;
 	outfile.open(filename.c_str(), ios::app);
 	outfile << user << ";" << message << endl;
 	outfile.close();
+	messageFileMutex.unlock();
 }
 
 vector<string> User::getUniqueSenderList() {

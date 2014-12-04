@@ -14,8 +14,7 @@ using std::sprintf;
 Package::Package(int packageType) {
 	this->packageType = packageType;
 
-	this->resetTime();
-	this->resetData();
+	this->reset();
 }
 
 Package::Package(const Package& package) {
@@ -23,61 +22,53 @@ Package::Package(const Package& package) {
 }
 
 Package::Package(const char* buffer) {
-	this->packageType = (int)buffer[0];
-	this->packageTime = (time_t)buffer[4];
-
-	this->resetData();
-	
-	copy(buffer + 8, buffer + getPackageSize(), this->data);
+	*this = buffer;
 }
 
-Package::~Package() {
-	delete data;
-}
+Package::~Package() {}
 
 int Package::getPackageSize() {
-	return dataSize + sizeof(int) + sizeof(time_t);
+	return dataSize + dataOffset;
 }
 
 int Package::getPackageType() const {
 	return packageType;
 }
 
+void Package::setPackageType(int messageNum) {
+	packageType = messageNum;
+}
+
 time_t Package::getPackageTime() const {
 	return packageTime;
 }
 
-const char* Package::getDataPtr() {
-	return data;
+void Package::resetData() {
+	// no action
 }
 
 Package& Package::operator=(const Package& rhs) {
 	if(this != &rhs) {
 		this->packageType = rhs.packageType;
 		this->packageTime = rhs.packageTime;
-
-		this->resetData();
-		copy(rhs.data, rhs.data + dataSize, this->data);
 	}
+
+	return *this;
+}
+
+Package& Package::operator=(const char* buff) {
+	this->packageType = (int)buff[0];
+	this->packageTime = (time_t)buff[4];
 
 	return *this;
 }
 
 void Package::reset() {
 	this->resetTime();
-	this->resetData();
 }
 
 void Package::resetTime() {
 	packageTime = system_clock::to_time_t(system_clock::now());
-}
-
-void Package::resetData() {
-	if(this->data == NULL) {
-		this->data = new char[dataSize];
-	}
-
-	memset(this->data, 0, dataSize);
 }
 
 ssize_t Package::send(TCPStream& stream) const {
@@ -85,8 +76,6 @@ ssize_t Package::send(TCPStream& stream) const {
 	memset(buff, 0, sizeof(buff));
 
 	sprintf(buff, "%d%d", packageType, (int)packageTime);
-
-	copy(data, data + dataSize, &buff[8]);
 
 	ssize_t sent = stream.send(buff, getPackageSize());
 

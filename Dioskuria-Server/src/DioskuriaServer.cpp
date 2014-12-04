@@ -30,12 +30,9 @@ DioskuriaServer::DioskuriaServer(int PORT) {
 		}
 	} */
 	ServerThread* st = new ServerThread();
-	while (true) {
-		usleep(50);
-	}
+	st->join();
 }
 
 DioskuriaServer::~DioskuriaServer() {
-	// TODO Auto-generated destructor stub
 }
 
