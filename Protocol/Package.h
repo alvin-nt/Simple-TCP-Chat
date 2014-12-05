@@ -98,7 +98,18 @@ public:
 	 */
 	virtual ssize_t send(TCPStream& stream) const;
 
-	//static Package receive(TCPStream& stream);
+protected:
+	/**
+	 * Writes the package data into a buffer
+	 * @param buff the data buffer
+	 */
+	virtual void writeData(char* buff) const;
+
+	/**
+	 * Read the package data from a buffer
+	 * @param buff the data buffer
+	 */
+	virtual void readData(const char* buff);
 };
 
 #endif

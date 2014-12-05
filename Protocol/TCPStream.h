@@ -58,7 +58,7 @@ public:
 	 * @param  flags      connection flags
 	 * @return            number of bytes read
 	 */
-	ssize_t receive(char* buffer, size_t len, int timeoutSec = 5, int flags = 0);
+	ssize_t receive(char* buffer, size_t len, int flags = 0);
 
 	/**
 	 * Gets the IP of the peer as a std::string
@@ -75,15 +75,6 @@ private:
 	TCPStream(int sd, struct sockaddr_in* address);
 	TCPStream();
 	TCPStream(const TCPStream& stream); // TODO: cctor definition
-
-	/**
-	 * Used to wait for read to execute
-	 *
-	 * using select()
-	 * @param  timeout length of waiting
-	 * @return         value from select()
-	 */
-	int waitForReadEvent(int timeout);
 };
 
 #endif

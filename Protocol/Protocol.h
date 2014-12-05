@@ -21,6 +21,16 @@
 
 namespace Protocol {
 /**
+ * maximum username length
+ */
+    static const int USERNAME_MAXLENGTH = 64;
+    
+/**
+ * maximum server name length
+ */
+    static const int SERVERNAME_MAXLENGTH = 504;
+
+/**
  * messageNum used when the user is signing up
  *
  * the data stucture is described below:
@@ -29,7 +39,7 @@ namespace Protocol {
  * userName (char - 64 byte): the user name, maximum 64 chars, not including NULL
  * password (char - 128 byte): the password hash, using SHA512
  */
- 	static const int userSignup = 11;
+    static const int userSignup = 11;
 
 /**
  * messageNum used when the user's signup is successful
@@ -39,7 +49,7 @@ namespace Protocol {
  *
  * userId (int - 4 byte): the generated userId
  */
- 	static const int userSignupSuccess = 12;
+    static const int userSignupSuccess = 12;
 
 /**
  * messageNum used when the user's signup failed
@@ -49,7 +59,7 @@ namespace Protocol {
  *
  * message (char - 504 byte): the message why it is failed.
  */
- 	static const int userSignupFail = 13;
+    static const int userSignupFail = 13;
 
 /**
  * messageNum used when the user's login failed
@@ -204,9 +214,8 @@ namespace Protocol {
  * messageNum used when failed to join a group
  *
  * the data structure is as follows:
- * [groupId][message]
+ * [message]
  *
- * groupId (int - 4 byte): the groupId
  * message (char - 500 byte): reason of failed join
  */
 	static const int groupJoinFail = 56;
@@ -224,8 +233,21 @@ namespace Protocol {
  */
 	static const int groupLeave = 57;
 
+/**
+ * messageNum used when the leave request is successfully responded
+ *
+ * no data
+ */
 	static const int groupLeaveSuccess = 58;
 
+/**
+ * messageNum used when the leave request is failed (due to... what?)
+ *
+ * data structure:
+ * [message]
+ *
+ * message (char - 504 bytes): the message explaining why it failed.
+ */
 	static const int groupLeaveFail = 59;
 
 /**
@@ -299,16 +321,21 @@ namespace Protocol {
 	static const int groupChangeMasterFail = 72;
 
 /**
- * messageNum used to send ping
- * Scope: all
+ * messageNum used to request the name of the server
+ *
+ * no data structure.
  */
- 	static const int pingSend = 101;
+	static const int serverNameRequest = 101;
 
 /**
- * messageNum used to acknowledge ping
- * Scope: all
+ * messageNum used to reply the serverNameRequest with the serverName
+ *
+ * the data structure is as follows:
+ * [message]
+ *
+ * message (char - 504 byte): the server name
  */
- 	static const int pingReceive = 102;
+	static const int serverNameResponse = 103;
 };
 
 #endif

@@ -6,6 +6,7 @@
  */
 
 #include "ServerThread.h"
+#include <cstring>
 
 using namespace std;
 
@@ -29,6 +30,17 @@ void* ServerThread::run() {
 		//TODO main loop thread, process query by package
 		try {
 			Package currentPackage(socket->receive());
+
+			char timeBuff[100];
+			memset(timeBuff, 0, sizeof(timeBuff));
+			time_t packageTime = currentPackage.getPackageTime();
+
+			strftime(timeBuff, sizeof(timeBuff), "%T", gmtime(&packageTime));
+
+			cout << "--- Received package stats --- " << endl
+				 << "packageNum: " << currentPackage.getPackageType() << endl
+				 << "packageTime: " << timeBuff << endl
+				 << "--- End of package stats --- " << endl;
 			if(currentPackage.getPackageType() == Protocol::userSignup) {
 				/* Signup */
 				/* Receive packet contains username password */
@@ -50,6 +62,7 @@ void* ServerThread::run() {
 					}
 				}
 			} else if (currentPackage.getPackageType() == Protocol::userLogin) {
+				cout << "logging in..." << endl;
 				/* Login */
 				/* Receive packet contains username password */
 				username = "dafuq";
@@ -57,9 +70,11 @@ void* ServerThread::run() {
 				if(currentUser.login(username, password) == USER_LOGIN_SUCCESS) {
 					Package reply(Protocol::userLoginSuccess);
 					reply.send(*socket);
+
 					threadName = username;
 					currentUser.loadMessages();
 					checkNotification();
+
 					cout << USER_LOGIN_SUCCESS << endl;
 				} else {
 					//send login failed
@@ -143,6 +158,7 @@ void* ServerThread::run() {
 				break;
 			}
 		} catch (SocketException& e) {
+			cerr << "Caught SocketException: " << e.what() << endl;
 			break;
 		}
 	}

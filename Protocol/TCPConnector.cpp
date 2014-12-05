@@ -2,6 +2,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include "TCPConnector.h"
+#include "SocketException.h"
 
 TCPStream* TCPConnector::connect(int port, const char* server)
 {
@@ -16,7 +17,7 @@ TCPStream* TCPConnector::connect(int port, const char* server)
 	
 	int sd = socket(AF_INET, SOCK_STREAM, 0);
 	if(::connect(sd, (struct sockaddr*)&address, sizeof(address)) != 0) {
-		return NULL;
+		throw SocketException("Cannot connect to server.");
 	} else {
 		return new TCPStream(sd, &address);
 	}

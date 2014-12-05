@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="." name="0">
+      <df name="bin">
+      </df>
+      <df name="Dioskuria-Client">
+        <df name="Debug">
+          <df name="src">
+            <df name="Protocol">
+            </df>
+          </df>
+        </df>
+        <df name="Release">
+          <df name="src">
+            <df name="Protocol">
+            </df>
+          </df>
+        </df>
+        <df name="src">
+          <df name="Protocol">
+            <df name="test">
+            </df>
+            <in>ClientThreadExample.cpp</in>
+            <in>ClientThreadExample.h</in>
+            <in>MessageId.cpp</in>
+            <in>MessageId.h</in>
+            <in>MessageSendPackage.cpp</in>
+            <in>MessageSendPackage.h</in>
+            <in>Package.cpp</in>
+            <in>Package.h</in>
+            <in>Protocol.h</in>
+            <in>SocketException.cpp</in>
+            <in>SocketException.h</in>
+            <in>TCPAcceptor.cpp</in>
+            <in>TCPAcceptor.h</in>
+            <in>TCPConnector.cpp</in>
+            <in>TCPConnector.h</in>
+            <in>TCPStream.cpp</in>
+            <in>TCPStream.h</in>
+            <in>TestClient.cpp</in>
+          </df>
+          <in>Constants.h</in>
+          <in>Helper.cpp</in>
+          <in>Helper.h</in>
+          <in>main.cpp</in>
+        </df>
+      </df>
+      <df name="Dioskuria-Server">
+        <df name="Debug">
+          <df name="src">
+            <df name="Protocol">
+            </df>
+            <df name="ServerClasses">
+            </df>
+            <df name="Thread">
+            </df>
+          </df>
+        </df>
+        <df name="Release">
+          <df name="src">
+            <df name="Protocol">
+            </df>
+            <df name="ServerClasses">
+            </df>
+            <df name="Thread">
+            </df>
+          </df>
+        </df>
+        <df name="src">
+          <df name="Protocol">
+            <df name="test">
+            </df>
+            <in>ClientThreadExample.cpp</in>
+            <in>MessageId.cpp</in>
+            <in>MessageId.h</in>
+            <in>MessageSendPackage.cpp</in>
+            <in>MessageSendPackage.h</in>
+            <in>Package.cpp</in>
+            <in>Package.h</in>
+            <in>Protocol.h</in>
+            <in>SocketException.cpp</in>
+            <in>SocketException.h</in>
+            <in>TCPAcceptor.cpp</in>
+            <in>TCPAcceptor.h</in>
+            <in>TCPConnector.cpp</in>
+            <in>TCPConnector.h</in>
+            <in>TCPStream.cpp</in>
+            <in>TCPStream.h</in>
+          </df>
+          <df name="ServerClasses">
+            <in>Group.cpp</in>
+            <in>Group.h</in>
+            <in>MessageProcessor.cpp</in>
+            <in>MessageProcessor.h</in>
+            <in>Mutexes.cpp</in>
+            <in>Mutexes.h</in>
+            <in>User.cpp</in>
+            <in>User.h</in>
+            <in>Utils.cpp</in>
+            <in>Utils.h</in>
+          </df>
+          <df name="Thread">
+            <in>thread.cpp</in>
+            <in>thread.h</in>
+          </df>
+          <in>Constants.h</in>
+          <in>DioskuriaServer.cpp</in>
+          <in>DioskuriaServer.h</in>
+          <in>ServerThread.cpp</in>
+          <in>ServerThread.h</in>
+          <in>globals.cpp</in>
+          <in>globals.h</in>
+          <in>main.cpp</in>
+        </df>
+      </df>
+      <df name="obj">
+      </df>
+      <df name="Protocol">
+        <df name="test">
+        </df>
+        <in>MessageId.cpp</in>
+        <in>MessageId.h</in>
+        <in>MessageReceivePackage.cpp</in>
+        <in>MessageReceivePackage.h</in>
+        <in>MessageSendPackage.cpp</in>
+        <in>MessageSendPackage.h</in>
+        <in>Package.cpp</in>
+        <in>Package.h</in>
+        <in>Protocol.h</in>
+        <in>SimpleMessagePackage.cpp</in>
+        <in>SimpleMessagePackage.h</in>
+        <in>SocketException.cpp</in>
+        <in>SocketException.h</in>
+        <in>TCPAcceptor.cpp</in>
+        <in>TCPAcceptor.h</in>
+        <in>TCPConnector.cpp</in>
+        <in>TCPConnector.h</in>
+        <in>TCPStream.cpp</in>
+        <in>TCPStream.h</in>
+        <in>UserInitPackage.cpp</in>
+        <in>UserInitPackage.h</in>
+      </df>
+    </df>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <platform>2</platform>
+      </toolsSet>
+      <compile>
+        <compiledirpicklist>
+          <compiledirpicklistitem>.</compiledirpicklistitem>
+          <compiledirpicklistitem>${AUTO_FOLDER}</compiledirpicklistitem>
+        </compiledirpicklist>
+        <compiledir>${AUTO_FOLDER}</compiledir>
+        <compilecommandpicklist>
+          <compilecommandpicklistitem>${MAKE} ${ITEM_NAME}.o</compilecommandpicklistitem>
+          <compilecommandpicklistitem>${AUTO_COMPILE} -std=c++11 -lpthread -Wall</compilecommandpicklistitem>
+          <compilecommandpicklistitem>${AUTO_COMPILE}</compilecommandpicklistitem>
+        </compilecommandpicklist>
+        <compilecommand>${AUTO_COMPILE}</compilecommand>
+      </compile>
+      <dbx_gdbdebugger version="1">
+        <gdb_pathmaps>
+        </gdb_pathmaps>
+        <gdb_interceptlist>
+          <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
+        </gdb_interceptlist>
+        <gdb_options>
+          <DebugOptions>
+          </DebugOptions>
+        </gdb_options>
+        <gdb_buildfirst gdb_buildfirst_overriden="false" gdb_buildfirst_old="false"/>
+      </dbx_gdbdebugger>
+      <nativedebugger version="1">
+        <engine>gdb</engine>
+      </nativedebugger>
+      <runprofile version="9">
+        <runcommandpicklist>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+        </runcommandpicklist>
+        <runcommand>"${OUTPUT_PATH}"</runcommand>
+        <rundir>.</rundir>
+        <buildfirst>false</buildfirst>
+        <terminal-type>0</terminal-type>
+        <remove-instrumentation>0</remove-instrumentation>
+        <environment>
+        </environment>
+      </runprofile>
+    </conf>
+  </confs>
+</configurationDescriptor>

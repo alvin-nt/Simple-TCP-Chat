@@ -57,8 +57,7 @@ Package& Package::operator=(const Package& rhs) {
 }
 
 Package& Package::operator=(const char* buff) {
-	this->packageType = (int)buff[0];
-	this->packageTime = (time_t)buff[4];
+	readData(buff);
 
 	return *this;
 }
@@ -75,9 +74,25 @@ ssize_t Package::send(TCPStream& stream) const {
 	char buff[getPackageSize()];
 	memset(buff, 0, sizeof(buff));
 
-	sprintf(buff, "%d%d", packageType, (int)packageTime);
+	writeData(buff);
 
 	ssize_t sent = stream.send(buff, getPackageSize());
 
 	return sent;
+}
+
+void Package::writeData(char* buff) const {
+	int* ptrType = (int*)&buff[0];
+	*ptrType = packageType;
+
+	time_t* ptrTime = (time_t*)&buff[4];
+	*ptrTime = packageTime;
+}
+
+void Package::readData(const char* buff) {
+	int* ptrType = (int*)&buff[0];
+	packageType = *ptrType;
+
+	time_t* ptrTime = (time_t*)&buff[4];
+	packageTime = *ptrTime;
 }

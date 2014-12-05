@@ -1,0 +1,6 @@
+called: g++
+	/home/alvin-nt/jarkom/[Tubes 2] Simple TCP Chat
+	g++
+	-o
+	./bin/run
+

@@ -11,6 +11,8 @@
 #include "Protocol/TCPConnector.h"
 #include "Protocol/Protocol.h"
 #include "Protocol/Package.h"
+
+#include <cstring>
 #include <iostream>
 #include <string>
 
@@ -30,10 +32,10 @@ int main(void) {
 			string username, password;
 			cout << "Name		: "; cin >> username;
 			cout << "Password	: "; cin >> password;
-			//proses signup begins here
-			//TODO add real data to package
+			
 			Package toSend(Protocol::userSignup);
 			toSend.send(*stream);
+
 			Package response(stream->receive());
 			if (response.getPackageType() == Protocol::userSignupSuccess) {
 				isSignedIn = true;
@@ -49,6 +51,18 @@ int main(void) {
 			//process login begins here
 			//TODO add real data to package, refer to ServerThread.cpp for server dummy implementation
 			Package toSend(Protocol::userLogin);
+
+			char timeBuff[100];
+			memset(timeBuff, 0, sizeof(timeBuff));
+			time_t packageTime = toSend.getPackageTime();
+
+			strftime(timeBuff, sizeof(timeBuff), "%T", localtime(&packageTime));
+
+			cout << "--- Sent package stats --- " << endl
+				 << "packageNum: " << toSend.getPackageType() << endl
+				 << "packageTime: " << timeBuff << endl
+				 << "--- End of package stats --- " << endl;
+
 			toSend.send(*stream);
 			Package response(stream->receive());
 			if (response.getPackageType() == Protocol::userLoginSuccess) {

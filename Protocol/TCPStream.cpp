@@ -40,53 +40,15 @@ ssize_t TCPStream::send(const Package& package) {
 	return package.send(*this);
 }
 
-ssize_t TCPStream::receive(char* buff, size_t len, int timeoutSec, int flags) {
-	ssize_t recvBytes = -1;
+ssize_t TCPStream::receive(char* buff, size_t len, int flags) {
+	ssize_t recvBytes = recv(m_sd, buff, len, flags);
 
-	cout << "Params"
-		 << "sdNum  : " << m_sd
-		 << "buffPtr: " << buff << endl
-		 << "buffLen: " << len << endl
-		 << "timeout: " << timeoutSec << endl
-		 << "flags: " << flags << endl;
-
-	if(timeoutSec <= 0) { // no error checking
-		recvBytes = recv(m_sd, buff, len, flags);
-	} else {
-		int waitEvent = waitForReadEvent(timeoutSec);
-
-		cout << "Wait event: " << waitEvent << endl;
-
-		if(waitEvent >= 0) {
-			recvBytes = recv(m_sd, buff, len, flags);
-			if(recvBytes == 0)
-				throw SocketException("Stream error: no data received.");
-		} else { // something grave wrong happens
-			throw SocketException("Stream error: select() returns " + waitEvent);
-		}
-	}
-
-	cout << "Received " << recvBytes << " bytes" << endl;
+	if(recvBytes == 0)
+		throw SocketException("Stream closed.");
+	else if(recvBytes == -1)
+		throw SocketException("Stream error.");
 
 	return recvBytes;
-}
-
-int TCPStream::waitForReadEvent(int timeout)
-{
-	// fileDescriptor for socket, to check for READ event
-    fd_set sdset;
-    struct timeval tv;
-
-    memset(&tv, 0, sizeof(tv));
-    tv.tv_sec = timeout;
-    tv.tv_usec = 0;
-
-    FD_ZERO(&sdset);
-    FD_SET(m_sd, &sdset);
-
-    int selectVal = select(m_sd+1, &sdset, NULL, NULL, &tv);
-
-   	return selectVal;
 }
 
 Package TCPStream::receive() {

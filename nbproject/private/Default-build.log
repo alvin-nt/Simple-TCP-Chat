@@ -1,0 +1,4 @@
+g++  -o ./bin/run
+g++: fatal error: no input files
+compilation terminated.
+make: *** [run] Error 4

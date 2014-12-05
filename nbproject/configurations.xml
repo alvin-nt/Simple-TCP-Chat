@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="." name="0">
+      <df name="Dioskuria-Client">
+        <df name="src">
+          <df name="Protocol">
+            <in>ClientThreadExample.cpp</in>
+            <in>MessageSendPackage.cpp</in>
+            <in>Package.cpp</in>
+            <in>SocketException.cpp</in>
+            <in>TCPAcceptor.cpp</in>
+            <in>TCPConnector.cpp</in>
+            <in>TCPStream.cpp</in>
+          </df>
+          <in>Helper.cpp</in>
+          <in>main.cpp</in>
+        </df>
+      </df>
+      <df name="Dioskuria-Server">
+        <df name="src">
+          <df name="Protocol">
+            <in>ClientThreadExample.cpp</in>
+            <in>MessageSendPackage.cpp</in>
+            <in>Package.cpp</in>
+            <in>SocketException.cpp</in>
+            <in>TCPAcceptor.cpp</in>
+            <in>TCPConnector.cpp</in>
+            <in>TCPStream.cpp</in>
+          </df>
+          <df name="ServerClasses">
+            <in>Group.cpp</in>
+            <in>MessageProcessor.cpp</in>
+            <in>Mutexes.cpp</in>
+            <in>User.cpp</in>
+            <in>Utils.cpp</in>
+          </df>
+          <df name="Thread">
+            <in>thread.cpp</in>
+          </df>
+          <in>DioskuriaServer.cpp</in>
+          <in>ServerThread.cpp</in>
+          <in>globals.cpp</in>
+          <in>main.cpp</in>
+        </df>
+      </df>
+      <df name="Protocol">
+        <in>MessageReceivePackage.cpp</in>
+        <in>MessageReceivePackage.h</in>
+        <in>MessageSendPackage.cpp</in>
+        <in>Package.cpp</in>
+        <in>SimpleMessagePackage.cpp</in>
+        <in>SimpleMessagePackage.h</in>
+        <in>SocketException.cpp</in>
+        <in>TCPAcceptor.cpp</in>
+        <in>TCPConnector.cpp</in>
+        <in>TCPStream.cpp</in>
+        <in>UserInitPackage.cpp</in>
+        <in>UserInitPackage.h</in>
+      </df>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>false</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <codeAssistance>
+      </codeAssistance>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>.</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath></executablePath>
+          <ccTool>
+            <standard>8</standard>
+          </ccTool>
+        </makeTool>
+      </makefileType>
+      <item path="Dioskuria-Client/src/Helper.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="Dioskuria-Client/src/Protocol/ClientThreadExample.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Client/src/Protocol/MessageSendPackage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Client/src/Protocol/Package.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Client/src/Protocol/SocketException.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Client/src/Protocol/TCPAcceptor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Client/src/Protocol/TCPConnector.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Client/src/Protocol/TCPStream.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Client/src/main.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/DioskuriaServer.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/Protocol/ClientThreadExample.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/Protocol/MessageSendPackage.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/Protocol/Package.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/Protocol/SocketException.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/Protocol/TCPAcceptor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/Protocol/TCPConnector.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/Protocol/TCPStream.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/ServerClasses/Group.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/ServerClasses/MessageProcessor.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/ServerClasses/Mutexes.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/ServerClasses/User.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/ServerClasses/Utils.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/ServerThread.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/Thread/thread.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/globals.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="Dioskuria-Server/src/main.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="Protocol/MessageReceivePackage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Protocol/MessageReceivePackage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Protocol/MessageSendPackage.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="Protocol/Package.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="Protocol/SimpleMessagePackage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Protocol/SimpleMessagePackage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Protocol/SocketException.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="Protocol/TCPAcceptor.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="Protocol/TCPConnector.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="Protocol/TCPStream.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="Protocol/UserInitPackage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Protocol/UserInitPackage.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
