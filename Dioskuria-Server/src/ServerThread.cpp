@@ -150,6 +150,16 @@ void* ServerThread::run() {
 		cout << endl << "LOOP" << endl;
 	}
 
+	//cleanup codes
+	threadPoolMutex.lock();
+	for(unsigned int i = 0; i < threadPool.size();i++) {
+		if (threadPool.at(i) == this) {
+			threadPool.erase(threadPool.begin()+i);
+			break;
+		}
+	}
+	threadPoolMutex.unlock();
+
 	return NULL;
 }
 
