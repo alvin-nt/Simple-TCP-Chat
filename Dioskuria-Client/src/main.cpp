@@ -9,31 +9,55 @@
 #include "Constants.h"
 #include "Protocol/TCPStream.h"
 #include "Protocol/TCPConnector.h"
+#include "Protocol/Protocol.h"
+#include "Protocol/Package.h"
 #include <iostream>
 #include <string>
 
 using namespace std;
 
+bool isSignedIn;
+
 int main(void) {
+	isSignedIn = false;
 	string input,dummy;
 	Helper helper;
 	TCPConnector* connector = new TCPConnector();
 	TCPStream* stream = connector->connect(18213,"localhost");
 	while(1){
 		cout << "> "; getline(cin, input);
-		if(input == "signup") {
+		if(input == "signup" && !isSignedIn) {
 			string username, password;
 			cout << "Name		: "; cin >> username;
 			cout << "Password	: "; cin >> password;
-			cout << username << " " << password << endl;
 			//proses signup begins here
-		} else if (input == "login") {
+			//TODO add real data to package
+			Package toSend(Protocol::userSignup);
+			toSend.send(*stream);
+			Package response(stream->receive());
+			if (response.getPackageType() == Protocol::userSignupSuccess) {
+				isSignedIn = true;
+				cout << SIGNUP_SUCCESS << endl;
+			} else if (response.getPackageType() == Protocol::userSignupFail) {
+				cout << SIGNUP_FAILED << endl;
+			}
+		} else if (input == "login" && !isSignedIn) {
 			string username, password;
 			cout << "Name		: "; cin >> username;
 			cout << "Password	: "; cin >> password;
 			cout << username << " " << password << endl;
 			//process login begins here
-		} else if (input.substr(0,7) == "message") {
+			//TODO add real data to package, refer to ServerThread.cpp for server dummy implementation
+			Package toSend(Protocol::userLogin);
+			toSend.send(*stream);
+			Package response(stream->receive());
+			if (response.getPackageType() == Protocol::userLoginSuccess) {
+				isSignedIn = true;
+				cout << LOGIN_SUCCESS << endl;
+			} else if (response.getPackageType() == Protocol::userLoginFail) {
+				cout << LOGIN_FAILED << endl;
+			}
+		} else if (input.substr(0,7) == "message" && isSignedIn) {
 			string recipient, message;
 			recipient = input.substr(8);
 			cout << "Message : " << endl;
@@ -41,24 +65,24 @@ int main(void) {
 
 			cout << recipient << " " << message << endl;
 			//process message here
-		} else if (input.substr(0,6) == "create") {
+		} else if (input.substr(0,6) == "create" && isSignedIn) {
 			string groupName;
 			groupName = input.substr(7);
 
 			cout << groupName << endl;
 			//process here
-		} else if (input.substr(0,4) == "join") {
+		} else if (input.substr(0,4) == "join" && isSignedIn) {
 			string groupName;
 			groupName = input.substr(5);
 
 			cout << groupName << endl;
 			//process join here
-		} else if (input.substr(0,5) == "leave") {
+		} else if (input.substr(0,5) == "leave" && isSignedIn) {
 			string groupName;
 			groupName = input.substr(6);
 
 			//process leave here
-		} else if (input.substr(0,4) == "show") {
+		} else if (input.substr(0,4) == "show" && isSignedIn) {
 			string showFromUser;
 			showFromUser = input.substr(5);
 
@@ -76,10 +100,11 @@ int main(void) {
 				process = messages.at(i);
 				cout << process << endl;
 			}
-		} else if (input.substr(0,6) == "logout") {
+		} else if (input.substr(0,6) == "logout" && isSignedIn) {
 			//send logout
+			Package toSend(Protocol::userLogout);
+			toSend.send(*stream);
 			break;
-
 		}
 
 		else {

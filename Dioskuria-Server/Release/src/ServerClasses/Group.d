@@ -8,6 +8,11 @@ src/ServerClasses/Group.d: ../src/ServerClasses/Group.cpp \
  ../src/ServerClasses/../ServerClasses/../ServerThread.h \
  ../src/ServerClasses/../ServerClasses/../Thread/thread.h \
  ../src/ServerClasses/../ServerClasses/../Protocol/TCPStream.h \
+ ../src/ServerClasses/../ServerClasses/../Protocol/Package.h \
+ ../src/ServerClasses/../ServerClasses/../Protocol/Protocol.h \
+ ../src/ServerClasses/../ServerClasses/../Protocol/TCPStream.h \
+ ../src/ServerClasses/../ServerClasses/../Protocol/Protocol.h \
+ ../src/ServerClasses/../ServerClasses/../Protocol/SocketException.h \
  ../src/ServerClasses/../ServerClasses/../ServerClasses/User.h \
  ../src/ServerClasses/../ServerClasses/../ServerClasses/Group.h \
  ../src/ServerClasses/../ServerClasses/../ServerClasses/Utils.h \
@@ -33,6 +38,16 @@ src/ServerClasses/Group.d: ../src/ServerClasses/Group.cpp \
 ../src/ServerClasses/../ServerClasses/../Thread/thread.h:
 
 ../src/ServerClasses/../ServerClasses/../Protocol/TCPStream.h:
+
+../src/ServerClasses/../ServerClasses/../Protocol/Package.h:
+
+../src/ServerClasses/../ServerClasses/../Protocol/Protocol.h:
+
+../src/ServerClasses/../ServerClasses/../Protocol/TCPStream.h:
+
+../src/ServerClasses/../ServerClasses/../Protocol/Protocol.h:
+
+../src/ServerClasses/../ServerClasses/../Protocol/SocketException.h:
 
 ../src/ServerClasses/../ServerClasses/../ServerClasses/User.h:
 

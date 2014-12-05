@@ -10,6 +10,9 @@
 
 #include "Thread/thread.h"
 #include "Protocol/TCPStream.h"
+#include "Protocol/Package.h"
+#include "Protocol/Protocol.h"
+#include "Protocol/SocketException.h"
 #include "ServerClasses/User.h"
 #include "ServerClasses/Group.h"
 #include "ServerClasses/Utils.h"

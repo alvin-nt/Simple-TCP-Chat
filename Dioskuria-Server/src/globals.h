@@ -20,6 +20,7 @@ extern std::vector<ServerThread*> threadPool;
 extern std::vector<Group*> groupList;
 
 extern bool isUserOnline(User user);
+extern bool isUserOnline(string user);
 
 
 
