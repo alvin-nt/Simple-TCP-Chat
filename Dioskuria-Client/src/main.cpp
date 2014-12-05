@@ -7,6 +7,8 @@
 
 #include "Helper.h"
 #include "Constants.h"
+#include "Protocol/TCPStream.h"
+#include "Protocol/TCPConnector.h"
 #include <iostream>
 #include <string>
 
@@ -72,6 +74,10 @@ int main(void) {
 				process = messages.at(i);
 				cout << process << endl;
 			}
+		} else if (input.substr(0,6) == "logout") {
+			//send logout
+			break;
+
 		}
 
 		else {
