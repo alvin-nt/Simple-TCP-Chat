@@ -17,6 +17,8 @@ using namespace std;
 int main(void) {
 	string input,dummy;
 	Helper helper;
+	TCPConnector* connector = new TCPConnector();
+	TCPStream* stream = connector->connect(18213,"localhost");
 	while(1){
 		cout << "> "; getline(cin, input);
 		if(input == "signup") {

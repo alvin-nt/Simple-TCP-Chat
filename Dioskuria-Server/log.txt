@@ -1,2 +1,4 @@
 [2014-12-05 02:39:26] dafuq logged in
 [2014-12-05 02:39:26] dafuq messages red-dot
+[2014-12-05 03:26:50] SERVER STARTS
+[2014-12-05 13:17:26] SERVER STARTS

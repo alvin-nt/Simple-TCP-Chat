@@ -26,6 +26,7 @@ void* ServerThread::run() {
 	//TODO inisialisasi network i/o stream
 	string username,password;
 	while (true) {
+		cout << "Client connected" << endl;
 		//TODO main loop thread, process query by package
 		//if parse signup
 			/* Signup */
@@ -145,7 +146,7 @@ void* ServerThread::run() {
 			/* Logout */
 			//Utils::writeServerLog(username + " logged out");
 			//break;
-
+		break;
 		cout << endl << "LOOP" << endl;
 	}
 

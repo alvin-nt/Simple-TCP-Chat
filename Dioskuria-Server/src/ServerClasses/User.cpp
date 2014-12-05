@@ -123,7 +123,7 @@ vector<string> User::getMessageFrom(string user) {
 			ret.push_back(unseenMessage.at(i).message);
 		}
 	}
-	for (int i = 0; i < temp.size(); i++) {
+	for (unsigned int i = 0; i < temp.size(); i++) {
 		unseenMessage.erase(unseenMessage.begin()+temp.at(i)-i);
 	}
 	return ret;
