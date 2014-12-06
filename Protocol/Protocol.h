@@ -37,7 +37,7 @@ namespace Protocol {
  * [userName][password]
  *
  * userName (char - 64 byte): the user name, maximum 64 chars, not including NULL
- * password (char - 128 byte): the password hash, using SHA512
+ * password (char - 64 byte): the password hash, using SHA512
  */
     static const int userSignup = 11;
 
@@ -68,7 +68,7 @@ namespace Protocol {
  * [userName][password]
  *
  * userName (char - 64 byte): the user name, maximum 64 chars, not including NULL
- * password (char - 128 byte): the password hash, using SHA512
+ * password (char - 64 byte): the password hash, using SHA512
  */
  	static const int userLogin = 14;
 

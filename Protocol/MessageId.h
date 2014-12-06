@@ -49,6 +49,8 @@ public:
 
 	MessageId(const MessageId& messageId);
 
+        void operator=(const MessageId& rhs);
+        
 	int getSenderId() const;
 
 	MessageId& setSenderId(int senderId);

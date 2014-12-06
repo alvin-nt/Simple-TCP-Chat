@@ -23,11 +23,17 @@ MessageId::MessageId(int senderId, int receiverId, char receiverType) {
 }
 
 MessageId::MessageId(const MessageId& messageId) {
-	senderId = messageId.senderId;
-	messageTime = messageId.messageTime;
-	receiverId = messageId.receiverId;
-	receiverType = messageId.receiverType;
+    *this = messageId;
 };
+
+void MessageId::operator=(const MessageId& rhs) {
+    if(this != &rhs) {
+        senderId = rhs.senderId;
+        messageTime = rhs.messageTime;
+        receiverId = rhs.receiverId;
+        receiverType = rhs.receiverType;
+    }
+}
 
 int MessageId::getSenderId() const {
 	return senderId;

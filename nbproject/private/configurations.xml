@@ -22,14 +22,17 @@
             <df name="test">
             </df>
             <in>ClientThreadExample.cpp</in>
-            <in>ClientThreadExample.h</in>
             <in>MessageId.cpp</in>
             <in>MessageId.h</in>
+            <in>MessageReceivePackage.cpp</in>
+            <in>MessageReceivePackage.h</in>
             <in>MessageSendPackage.cpp</in>
             <in>MessageSendPackage.h</in>
             <in>Package.cpp</in>
             <in>Package.h</in>
             <in>Protocol.h</in>
+            <in>SimpleMessagePackage.cpp</in>
+            <in>SimpleMessagePackage.h</in>
             <in>SocketException.cpp</in>
             <in>SocketException.h</in>
             <in>TCPAcceptor.cpp</in>
@@ -38,7 +41,8 @@
             <in>TCPConnector.h</in>
             <in>TCPStream.cpp</in>
             <in>TCPStream.h</in>
-            <in>TestClient.cpp</in>
+            <in>UserInitPackage.cpp</in>
+            <in>UserInitPackage.h</in>
           </df>
           <in>Constants.h</in>
           <in>Helper.cpp</in>
@@ -74,11 +78,15 @@
             <in>ClientThreadExample.cpp</in>
             <in>MessageId.cpp</in>
             <in>MessageId.h</in>
+            <in>MessageReceivePackage.cpp</in>
+            <in>MessageReceivePackage.h</in>
             <in>MessageSendPackage.cpp</in>
             <in>MessageSendPackage.h</in>
             <in>Package.cpp</in>
             <in>Package.h</in>
             <in>Protocol.h</in>
+            <in>SimpleMessagePackage.cpp</in>
+            <in>SimpleMessagePackage.h</in>
             <in>SocketException.cpp</in>
             <in>SocketException.h</in>
             <in>TCPAcceptor.cpp</in>
@@ -87,6 +95,8 @@
             <in>TCPConnector.h</in>
             <in>TCPStream.cpp</in>
             <in>TCPStream.h</in>
+            <in>UserInitPackage.cpp</in>
+            <in>UserInitPackage.h</in>
           </df>
           <df name="ServerClasses">
             <in>Group.cpp</in>
@@ -121,6 +131,8 @@
         </df>
         <in>MessageId.cpp</in>
         <in>MessageId.h</in>
+        <in>MessageIdPackage.cpp</in>
+        <in>MessageIdPackage.h</in>
         <in>MessageReceivePackage.cpp</in>
         <in>MessageReceivePackage.h</in>
         <in>MessageSendPackage.cpp</in>
@@ -138,6 +150,8 @@
         <in>TCPConnector.h</in>
         <in>TCPStream.cpp</in>
         <in>TCPStream.h</in>
+        <in>UserIdPackage.cpp</in>
+        <in>UserIdPackage.h</in>
         <in>UserInitPackage.cpp</in>
         <in>UserInitPackage.h</in>
       </df>

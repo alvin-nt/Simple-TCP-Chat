@@ -45,6 +45,8 @@
         </df>
       </df>
       <df name="Protocol">
+        <in>MessageIdPackage.cpp</in>
+        <in>MessageIdPackage.h</in>
         <in>MessageReceivePackage.cpp</in>
         <in>MessageReceivePackage.h</in>
         <in>MessageSendPackage.cpp</in>
@@ -55,6 +57,8 @@
         <in>TCPAcceptor.cpp</in>
         <in>TCPConnector.cpp</in>
         <in>TCPStream.cpp</in>
+        <in>UserIdPackage.cpp</in>
+        <in>UserIdPackage.h</in>
         <in>UserInitPackage.cpp</in>
         <in>UserInitPackage.h</in>
       </df>
@@ -209,6 +213,10 @@
       </item>
       <item path="Dioskuria-Server/src/main.cpp" ex="false" tool="1" flavor2="4">
       </item>
+      <item path="Protocol/MessageIdPackage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Protocol/MessageIdPackage.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Protocol/MessageReceivePackage.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Protocol/MessageReceivePackage.h" ex="false" tool="3" flavor2="0">
@@ -228,6 +236,10 @@
       <item path="Protocol/TCPConnector.cpp" ex="false" tool="1" flavor2="4">
       </item>
       <item path="Protocol/TCPStream.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="Protocol/UserIdPackage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Protocol/UserIdPackage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Protocol/UserInitPackage.cpp" ex="false" tool="1" flavor2="0">
       </item>

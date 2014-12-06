@@ -16,7 +16,7 @@ private:
     char username[Protocol::USERNAME_MAXLENGTH];
     unsigned char passwordHash[SHA512_DIGEST_LENGTH];
 public:
-    UserInitPackage(int packageType);
+    UserInitPackage(int packageType = Protocol::userLogin);
     UserInitPackage(const UserInitPackage& orig);
     virtual ~UserInitPackage();
     
