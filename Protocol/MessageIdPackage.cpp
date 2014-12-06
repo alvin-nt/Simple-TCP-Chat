@@ -33,6 +33,16 @@ void MessageIdPackage::setMessageId(const MessageId& messageId) {
     this->messageId = messageId;
 }
 
+void MessageIdPackage::operator=(const MessageIdPackage& rhs) {
+    if(this != &rhs) {
+        this->messageId = rhs.messageId;
+    }
+}
+
+void MessageIdPackage::operator=(const char* buff) {
+    readData(buff);
+}
+
 void MessageIdPackage::writeData(char* buff) const {
     Package::writeData(buff);
     

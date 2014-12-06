@@ -23,6 +23,9 @@ public:
     const string getUserName() const;
     const string getUserPasswordHash() const;
     
+    void operator=(const UserInitPackage& rhs);
+    void operator=(const char* buff);
+    
     void setUserName(const char* username);
     void setUserName(const string& username);
     

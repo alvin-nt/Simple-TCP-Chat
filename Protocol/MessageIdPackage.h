@@ -12,7 +12,7 @@
 #include "MessageId.h"
 
 class MessageIdPackage : public Package {
-private:
+protected:
     MessageId messageId;
 public:
     MessageIdPackage(const MessageId& messageId, int packageType = Protocol::messageRead);
@@ -20,11 +20,15 @@ public:
     
     virtual ~MessageIdPackage();
     
+    void operator=(const MessageIdPackage& rhs);
+    
+    void operator=(const char* buff);
+    
     MessageId& getMessageId();
     const MessageId& getConstMessageId() const;
     
     void setMessageId(const MessageId& messageId);
-private:
+protected:
     void writeData(char* buff) const;
     void readData(const char* buff);
 };

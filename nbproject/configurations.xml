@@ -45,10 +45,18 @@
         </df>
       </df>
       <df name="Protocol">
+        <in>GroupCreatePackage.cpp</in>
+        <in>GroupCreatePackage.h</in>
+        <in>GroupInfoPackage.cpp</in>
+        <in>GroupInfoPackage.h</in>
+        <in>GroupJoinPackage.cpp</in>
+        <in>GroupJoinPackage.h</in>
         <in>MessageIdPackage.cpp</in>
         <in>MessageIdPackage.h</in>
         <in>MessageReceivePackage.cpp</in>
         <in>MessageReceivePackage.h</in>
+        <in>MessageRecvPackage.cpp</in>
+        <in>MessageRecvPackage.h</in>
         <in>MessageSendPackage.cpp</in>
         <in>Package.cpp</in>
         <in>SimpleMessagePackage.cpp</in>
@@ -213,6 +221,18 @@
       </item>
       <item path="Dioskuria-Server/src/main.cpp" ex="false" tool="1" flavor2="4">
       </item>
+      <item path="Protocol/GroupCreatePackage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Protocol/GroupCreatePackage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Protocol/GroupInfoPackage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Protocol/GroupInfoPackage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Protocol/GroupJoinPackage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Protocol/GroupJoinPackage.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Protocol/MessageIdPackage.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Protocol/MessageIdPackage.h" ex="false" tool="3" flavor2="0">
@@ -220,6 +240,10 @@
       <item path="Protocol/MessageReceivePackage.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Protocol/MessageReceivePackage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Protocol/MessageRecvPackage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Protocol/MessageRecvPackage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Protocol/MessageSendPackage.cpp" ex="false" tool="1" flavor2="4">
       </item>
