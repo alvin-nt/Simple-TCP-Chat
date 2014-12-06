@@ -56,18 +56,6 @@ void UserInitPackage::setUserPassword(const string& password) {
     setUserPassword(password.c_str());
 }
 
-void UserInitPackage::operator=(const UserInitPackage& rhs) {
-    if(this != &rhs) {
-        packageType = rhs.packageType;
-        copy(rhs.username, rhs.username + sizeof(username), username);
-        copy(rhs.passwordHash, rhs.passwordHash + sizeof(passwordHash), passwordHash);
-    }
-}
-
-void UserInitPackage::operator=(const char* buff) {
-    readData(buff);
-}
-
 void UserInitPackage::writeData(char* buff) const {
     Package::writeData(buff);
     

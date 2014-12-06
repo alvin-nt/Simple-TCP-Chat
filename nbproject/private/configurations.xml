@@ -129,20 +129,12 @@
       <df name="Protocol">
         <df name="test">
         </df>
-        <in>GroupCreatePackage.cpp</in>
-        <in>GroupCreatePackage.h</in>
-        <in>GroupInfoPackage.cpp</in>
-        <in>GroupInfoPackage.h</in>
-        <in>GroupJoinPackage.cpp</in>
-        <in>GroupJoinPackage.h</in>
         <in>MessageId.cpp</in>
         <in>MessageId.h</in>
         <in>MessageIdPackage.cpp</in>
         <in>MessageIdPackage.h</in>
         <in>MessageReceivePackage.cpp</in>
         <in>MessageReceivePackage.h</in>
-        <in>MessageRecvPackage.cpp</in>
-        <in>MessageRecvPackage.h</in>
         <in>MessageSendPackage.cpp</in>
         <in>MessageSendPackage.h</in>
         <in>Package.cpp</in>
