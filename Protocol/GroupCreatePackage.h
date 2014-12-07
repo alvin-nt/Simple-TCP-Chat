@@ -12,12 +12,13 @@
 
 class GroupCreatePackage : public Package {
 private:
-    int creatorId;
+    char creatorName[Protocol::USERNAME_MAXLENGTH];
     char groupName[Protocol::USERNAME_MAXLENGTH];
     string description;
 public:
-    GroupCreatePackage(int creatorId, const string& groupName = "", const string& description = "");
+    GroupCreatePackage(const string& creatorName, const string& groupName = "", const string& description = "");
     GroupCreatePackage(const GroupCreatePackage& orig);
+    GroupCreatePackage(const char* buff);
     
     virtual ~GroupCreatePackage();
     
@@ -25,9 +26,11 @@ public:
     
     void operator=(const char* buff);
     
-    const int getCreatorId() const;
+    string getCreatorName() const;
     
-    void setCreatorId(int creatorId);
+    void setCreatorName(const char* creatorName);
+
+    void setCreatorName(const string& creatorName);
     
     const string getGroupName() const;
     

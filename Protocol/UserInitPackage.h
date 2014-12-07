@@ -13,10 +13,12 @@
 class UserInitPackage : public Package {
 private:
     char username[Protocol::USERNAME_MAXLENGTH];
-    unsigned char passwordHash[Protocol::USERNAME_MAXLENGTH];
+    char passwordHash[Protocol::USERNAME_MAXLENGTH];
 public:
     UserInitPackage(int packageType = Protocol::userLogin);
     UserInitPackage(const UserInitPackage& orig);
+    UserInitPackage(const char* buff);
+
     virtual ~UserInitPackage();
     
     const string getUserName() const;

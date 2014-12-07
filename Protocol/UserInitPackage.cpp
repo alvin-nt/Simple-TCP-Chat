@@ -25,6 +25,12 @@ UserInitPackage::UserInitPackage(const UserInitPackage& orig)
     copy(orig.passwordHash, orig.passwordHash + sizeof(passwordHash), passwordHash);
 }
 
+UserInitPackage::UserInitPackage(const char* buff)
+	: Package(buff)
+{
+	*this = buff;
+}
+
 UserInitPackage::~UserInitPackage() {
 }
 

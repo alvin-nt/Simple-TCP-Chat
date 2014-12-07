@@ -45,17 +45,16 @@ public:
 private:
 	string username;
 	string password;
-	//TODO add other attributes
 
+	// TODO: add other attributes
 
 	bool queryUser();
 	void clearMessageFile();
-
-
 };
 
 struct Message {
 	string sender;
+	time_t time;
 	string message;
 };
 

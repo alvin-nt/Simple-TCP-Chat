@@ -12,6 +12,13 @@
 #include "Protocol/Protocol.h"
 #include "Protocol/Package.h"
 
+#include "Protocol/GroupJoinPackage.h"
+#include "Protocol/GroupCreatePackage.h"
+#include "Protocol/MessageRecvPackage.h"
+#include "Protocol/MessageSendPackage.h"
+#include "Protocol/SimpleMessagePackage.h"
+#include "Protocol/UserInitPackage.h"
+
 #include <cstring>
 #include <iostream>
 #include <string>
@@ -23,22 +30,34 @@ bool isSignedIn;
 int main(void) {
 	isSignedIn = false;
 	string input,dummy;
+
 	Helper helper;
 	TCPConnector* connector = new TCPConnector();
 	TCPStream* stream = connector->connect(18213,"localhost");
-	while(1){
+
+	string userName;
+
+	while(1) {
+		char buffer[512] = {};
+
 		cout << "> "; getline(cin, input);
 		if(input == "signup" && !isSignedIn) {
 			string username, password;
 			cout << "Name		: "; cin >> username;
 			cout << "Password	: "; cin >> password;
 			
-			Package toSend(Protocol::userSignup);
+			UserInitPackage toSend(Protocol::userSignup);
+			toSend.setUserName(username);
+			toSend.setUserPassword(password);
+
 			toSend.send(*stream);
 
-			Package response(stream->receive());
+			stream->receive(buffer, sizeof(buffer));
+
+			SimpleMessagePackage response = buffer;
 			if (response.getPackageType() == Protocol::userSignupSuccess) {
 				isSignedIn = true;
+				userName = username;
 				cout << SIGNUP_SUCCESS << endl;
 			} else if (response.getPackageType() == Protocol::userSignupFail) {
 				cout << SIGNUP_FAILED << endl;
@@ -47,29 +66,24 @@ int main(void) {
 			string username, password;
 			cout << "Name		: "; cin >> username;
 			cout << "Password	: "; cin >> password;
-			cout << username << " " << password << endl;
+
 			//process login begins here
 			//TODO add real data to package, refer to ServerThread.cpp for server dummy implementation
-			Package toSend(Protocol::userLogin);
-
-			char timeBuff[100];
-			memset(timeBuff, 0, sizeof(timeBuff));
-			time_t packageTime = toSend.getPackageTime();
-
-			strftime(timeBuff, sizeof(timeBuff), "%T", localtime(&packageTime));
-
-			cout << "--- Sent package stats --- " << endl
-				 << "packageNum: " << toSend.getPackageType() << endl
-				 << "packageTime: " << timeBuff << endl
-				 << "--- End of package stats --- " << endl;
+			UserInitPackage toSend(Protocol::userLogin);
+			toSend.setUserName(username);
+			toSend.setUserPassword(password);
 
 			toSend.send(*stream);
-			Package response(stream->receive());
+
+			stream->receive(buffer, sizeof(buffer));
+
+			SimpleMessagePackage response(buffer);
 			if (response.getPackageType() == Protocol::userLoginSuccess) {
 				isSignedIn = true;
+				userName = username;
 				cout << LOGIN_SUCCESS << endl;
 			} else if (response.getPackageType() == Protocol::userLoginFail) {
-				cout << LOGIN_FAILED << endl;
+				cout << LOGIN_FAILED << ": " << response.getMessage() << endl;
 			}
 		} else if (input.substr(0,7) == "message" && isSignedIn) {
 			string recipient, message;
@@ -78,41 +92,116 @@ int main(void) {
 			getline(cin, message);
 
 			cout << recipient << " " << message << endl;
+
 			//process message here
+			MessageSendPackage package(recipient, message);
+			package.send(*stream);
+
+			stream->receive(buffer, sizeof(buffer));
+
+			SimpleMessagePackage response = buffer;
+			int packageType = response.getPackageType();
+			if(packageType == Protocol::messageSendSuccess) {
+				cout << "Message sent successfully" << endl;
+			} else if (packageType == Protocol::messageSendFailed) {
+				cout << "Error:  " << response.getMessage() << endl;
+			}
 		} else if (input.substr(0,6) == "create" && isSignedIn) {
 			string groupName;
 			groupName = input.substr(7);
 
 			cout << groupName << endl;
+
 			//process here
+			GroupCreatePackage package(userName, groupName);
+			package.send(*stream);
+
+			stream->receive(buffer, sizeof(buffer));
+
+			SimpleMessagePackage response = buffer;
+			int packageType = response.getPackageType();
+			if(packageType == Protocol::groupCreateSuccess) {
+				cout << "Group created successfully" << endl;
+			} else if (packageType == Protocol::groupCreateFail) {
+				cout << "Error:  " << response.getMessage() << endl;
+			}
+
 		} else if (input.substr(0,4) == "join" && isSignedIn) {
 			string groupName;
 			groupName = input.substr(5);
 
 			cout << groupName << endl;
-			//process join here
+
+			GroupJoinPackage package(userName, groupName);
+			package.send(*stream);
+
+			stream->receive(buffer, sizeof(buffer));
+
+			SimpleMessagePackage response = buffer;
+			int packageType = response.getPackageType();
+			if(packageType == Protocol::groupJoinSuccess) {
+				cout << "Joined group " << groupName << endl;
+			} else if (packageType == Protocol::groupJoinFail) {
+				cout << "Error:  " << response.getMessage() << endl;
+			}
 		} else if (input.substr(0,5) == "leave" && isSignedIn) {
 			string groupName;
 			groupName = input.substr(6);
 
-			//process leave here
+			SimpleMessagePackage package(Protocol::groupLeave);
+			package.setMessage(groupName.substr(0, Protocol::USERNAME_MAXLENGTH));
+
+			package.send(*stream);
+
+			SimpleMessagePackage response = buffer;
+			int packageType = response.getPackageType();
+			if(packageType == Protocol::groupLeaveSuccess) {
+				cout << "Left group " << groupName << endl;
+			} else if (packageType == Protocol::groupLeaveFail) {
+				cout << "Error:  " << response.getMessage() << endl;
+			}
 		} else if (input.substr(0,4) == "show" && isSignedIn) {
 			string showFromUser;
 			showFromUser = input.substr(5);
 
-			//process show here
-			//show protocol:
-			//read from file
-			//print new message str
-			//ask from server
 			vector<string> messages;
 			messages = helper.fetchFromFile(showFromUser);
-			messages.push_back(NEW_MESSAGE);
-			//pushback all fetched new message from server
-			string process;
-			for (unsigned int i = 0; i < messages.size(); i++) {
-				process = messages.at(i);
-				cout << process << endl;
+
+			// pushback all fetched new message from server
+			Package request(Protocol::messageRecvRequest);
+			request.send(*stream);
+
+			stream->receive(buffer, sizeof(buffer), MSG_PEEK);
+			// read the responses from here
+			MessageRecvPackage receivedMessage = buffer;
+
+			while (receivedMessage.getPackageType() == Protocol::messageRecv) {
+				MessageRecvPackage::receive(receivedMessage, *stream);
+
+				char buff[100] = {};
+				time_t msgTime = receivedMessage.getMessageTime();
+				strftime(buff, sizeof(buff), "%F %T", localtime(&msgTime));
+
+				string format = "[" + string() + buff +
+								" - " + receivedMessage.getMessageSender() + "]" +
+								receivedMessage.getMessage();
+
+				messages.push_back(format);
+
+				stream->receive(buffer, sizeof(buffer), MSG_PEEK);
+				receivedMessage = buffer;
+			}
+
+			// flush
+			stream->receive(buffer, sizeof(buffer));
+
+			if(!messages.empty()) {
+				cout << NEW_MESSAGE << endl;
+				for (auto message: messages) {
+					cout << message << endl;
+				}
+			} else {
+				cout << "No new messages" << endl;
 			}
 		} else if (input.substr(0,6) == "logout" && isSignedIn) {
 			//send logout
@@ -133,4 +222,3 @@ int main(void) {
 	}
 
 }
-

@@ -11,11 +11,11 @@
 
 using namespace std;
 
-GroupJoinPackage::GroupJoinPackage(int userId, const char* groupName) 
+GroupJoinPackage::GroupJoinPackage(const string& userName, const string& groupName)
     : Package(Protocol::groupJoin)
 {
-    this->userId = userId;
-    copy(groupName, groupName + sizeof(this->groupName), this->groupName);
+    setUserName(userName);
+    setGroupName(groupName);
 }
 
 GroupJoinPackage::GroupJoinPackage(const GroupJoinPackage& orig) 
@@ -24,13 +24,19 @@ GroupJoinPackage::GroupJoinPackage(const GroupJoinPackage& orig)
     *this = orig;
 }
 
+GroupJoinPackage::GroupJoinPackage(const char* buff)
+	: Package(buff)
+{
+	readData(buff);
+}
+
 GroupJoinPackage::~GroupJoinPackage() 
 {
 }
 
 void GroupJoinPackage::operator=(const GroupJoinPackage& rhs) {
     if(this != &rhs) {
-        userId = rhs.userId;
+        copy(rhs.userName, rhs.userName + sizeof(userName), userName);
         copy(rhs.groupName, rhs.groupName + sizeof(groupName), groupName);
     }
 }
@@ -39,18 +45,22 @@ void GroupJoinPackage::operator=(const char* buff) {
     readData(buff);
 }
 
-int GroupJoinPackage::getUserId() const {
-    return userId;
+string GroupJoinPackage::getUserName() const {
+    return string(userName, sizeof(userName));
 }
-void GroupJoinPackage::setUserId(int userId) {
-    this->userId = userId;
+void GroupJoinPackage::setUserName(const char* userName) {
+    copy(userName, userName + sizeof(this->userName), this->userName);
+}
+
+void GroupJoinPackage::setUserName(const string& userName) {
+	setUserName(userName.substr(0, sizeof(this->userName)).c_str());
 }
 
 const string GroupJoinPackage::getGroupName() const {
     return string(groupName, sizeof(groupName));
 }
 
-void GroupJoinPackage::setGroupname(const string& groupName) {
+void GroupJoinPackage::setGroupName(const string& groupName) {
     string cpy = groupName.substr(0, Protocol::USERNAME_MAXLENGTH);
     
     copy(cpy.begin(), cpy.end(), this->groupName);
@@ -59,19 +69,17 @@ void GroupJoinPackage::setGroupname(const string& groupName) {
 void GroupJoinPackage::readData(const char* buff) {
     Package::readData(buff);
     
-    int* ptrUserId = (int*)&buff[dataOffset];
-    userId = *ptrUserId;
+    copy(&buff[dataOffset], &buff[dataOffset] + sizeof(userName), userName);
     
-    copy(&buff[dataOffset + sizeof(userId)], 
-            &buff[dataOffset + sizeof(userId)] + sizeof(groupName), 
+    copy(&buff[dataOffset + sizeof(userName)],
+            &buff[dataOffset + sizeof(userName)] + sizeof(groupName),
          groupName);
 }
 
 void GroupJoinPackage::writeData(char* buff) const {
     Package::writeData(buff);
     
-    int* ptrUserId = (int*)&buff[dataOffset];
-    *ptrUserId = userId;
+    copy(userName, userName + sizeof(userName), &buff[dataOffset]);
     
-    copy(groupName, &(groupName[0 + sizeof(groupName)]), &buff[dataOffset + sizeof(userId)]);
+    copy(groupName, &(groupName[0 + sizeof(groupName)]), &buff[dataOffset + sizeof(userName)]);
 }

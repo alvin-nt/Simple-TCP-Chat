@@ -16,6 +16,7 @@ private:
 public:
     SimpleMessagePackage(int packageType);
     SimpleMessagePackage(const SimpleMessagePackage& orig);
+    SimpleMessagePackage(const char* buff);
     
     const string& getMessage() const;
     
