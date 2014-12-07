@@ -34,7 +34,7 @@ public:
 	string createUser();
 	void loadMessages();
 	vector<string> getMessageFrom(string user);
-	void dumpMessageTo(string user, string message);
+	void dumpMessageTo(string user, time_t msgTime, string message);
 	void dumpMessageTo(string groupname, string user, string message);
 	vector<string> getUniqueSenderList();
 

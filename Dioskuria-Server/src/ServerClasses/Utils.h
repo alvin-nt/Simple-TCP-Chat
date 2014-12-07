@@ -20,6 +20,7 @@ using namespace std;
 class Utils {
 public:
 	static const string currentDateTime();
+	static const string dateTime(const time_t msgTime);
 	static void writeServerLog(string message);
 
 

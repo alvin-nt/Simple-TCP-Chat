@@ -1,0 +1,43 @@
+* [33mfb817b7[m[33m ([1;36mHEAD[m[33m, [1;31morigin/temp[m[33m, [1;32mtemp[m[33m)[m Implemented packages
+* [33m1827357[m removed openssl
+[31m|[m * [33m188d7cc[m[33m ([1;31morigin/master[m[33m, [1;31morigin/HEAD[m[33m, [1;32mmaster[m[33m)[m Revert "protocol (almost) done"
+[31m|[m[31m/[m  
+* [33m345310c[m protocol (almost) done
+* [33m8f7b92b[m some more implementations, some fixes
+* [33m8acea4c[m Refactoring, more implemented protocols, netbeans. Killing spree!
+* [33meca88a8[m Stub for send/receive added, prelim test success, but cannot login
+* [33mab3a2e5[m added forgotten clean thread from threadpool on disconnect
+* [33m981709a[m Client successfully connected to server
+* [33m47b73eb[m Client successfully connected to server
+* [33m7f8fbeb[m add logout and protocol stub
+* [33mc9a6adf[m client tinggal sambung network, tambahin kalo ada yg kurang
+* [33m3f88543[m initial client project
+* [33m60ab99f[m final fix, ready for network accept
+* [33md8fe8fc[m Server Prototype Finished, all functional, tinggal network
+* [33mc4ec4e3[m Group insya allah 100%
+* [33m5aeb8e7[m Group several minor fixes
+* [33m83a26bd[m Group 80% implemented
+* [33mae9a504[m Create group race condition solved... do I have to rely on files?? argh lookup for java volatile equivalent in c++
+* [33mfd31d04[m Group methods added, mutex fixed, todo race condition in vector access
+* [33m2a17cd7[m Group proto added
+* [33m297991b[m Merge with new protocol, user login signup mutex tested and working
+* [33m1167b77[m Fixing ClientThreadExample
+* [33m364aa8b[m Some modifications to the protocol, now handles timeout successfully.
+*   [33m9858322[m Merge branch 'master' of https://github.com/alvin-nt/Simple-TCP-Chat
+[33m|[m[34m\[m  
+[33m|[m * [33m2e50354[m Spec #5 user notification ready from server, waiting packet side implementation
+[33m|[m * [33ma59a002[m Receive message proto done, module functional
+[33m|[m * [33ma89a914[m Message passing between user prototype, I/O Operation succeeded
+[33m|[m * [33m7e41ee9[m Login and Signup Fix
+[33m|[m * [33m5bd73d9[m Debugged, server now operational, functions are not
+[33m|[m * [33m9625ca1[m server logging utils added, basic frame of server added
+[33m|[m * [33mc2aa602[m Refactored server project folder
+* [34m|[m [33m4c57fbd[m another protocol, untested though
+* [34m|[m [33m6e764ca[m fixes on protocol, still buggy, tests
+[34m|[m[34m/[m  
+* [33m14e8181[m Initial commit, server program
+* [33m0fd2f31[m forgot to add receive function for Package, duh ._.
+* [33m6d0c3f8[m implemented basic send() and receive() for TCPStream
+* [33m214591b[m New file, some proto for MessageSend...
+* [33m97eb861[m initial commit
+* [33mfe5614a[m Initial commit

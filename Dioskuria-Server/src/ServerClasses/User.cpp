@@ -6,6 +6,7 @@
  */
 
 #include "../ServerClasses/User.h"
+#include <cstring>
 
 using namespace std;
 
@@ -96,6 +97,7 @@ string User::createUser() {
 
 void User::loadMessages() {
 	messageFileMutex.lock();
+
 	string filename = username + "-messages.txt";
 	ifstream input;
 	input.open(filename.c_str(), ifstream::in);
@@ -104,8 +106,22 @@ void User::loadMessages() {
 		string delimiter = ";";
 		while (getline(input, process)) {
 			struct Message temp;
-			temp.sender = process.substr(0, process.find(delimiter));
-			temp.message = process.substr(process.find(delimiter)+1);
+			int initialDelimiter = process.find(delimiter);
+
+			temp.sender = process.substr(0, initialDelimiter);
+
+			string timeStr = process.substr(initialDelimiter + 1,
+								process.rfind(delimiter) - temp.sender.length() - 1);
+
+			cout << timeStr << endl;
+
+			struct tm timeStruct;
+			memset(&timeStruct, 0, sizeof(struct tm));
+			strptime(timeStr.c_str(), "[%Y-%m-%d %X]", &timeStruct);
+
+			temp.time = mktime(&timeStruct);
+
+			temp.message = process.substr(process.rfind(delimiter) + 1);
 			unseenMessage.push_back(temp);
 		}
 	}
@@ -137,22 +153,24 @@ void User::clearMessageFile() {
 	remove(filename.c_str());
 }
 
-void User::dumpMessageTo(string user, string message) {
+void User::dumpMessageTo(string user, time_t time, string message) {
 	messageFileMutex.lock();
+
 	string filename = user + "-messages.txt";
 	ofstream outfile;
 	outfile.open(filename.c_str(), ios::app);
-	outfile << username << ";" << Utils::currentDateTime()+" "+message << endl;
+	outfile << username << ";" << Utils::dateTime(time) + ";" + message << endl;
 	outfile.close();
+
 	messageFileMutex.unlock();
 }
 
-void User::dumpMessageTo(string groupname,string user, string message) {
+void User::dumpMessageTo(string groupname, string user, string message) {
 	messageFileMutex.lock();
 	string filename = user + "-messages.txt";
 	ofstream outfile;
 	outfile.open(filename.c_str(), ios::app);
-	outfile << groupname << ";" << Utils::currentDateTime()+" "+message << endl;
+	outfile << groupname << ";" << Utils::currentDateTime() + " " + message << endl;
 	outfile.close();
 	messageFileMutex.unlock();
 }

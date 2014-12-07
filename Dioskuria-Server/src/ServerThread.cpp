@@ -121,6 +121,7 @@ void* ServerThread::run() {
 				MessageSendPackage package = buff;
 
 				string name = package.getReceiver();
+				time_t msgTime = package.getPackageTime();
 				string msg = package.getMessage();
 				//msg = currentUser.getUserName() + " : " + message;
 				bool isGroupName = Group::isGroupExists(name);
@@ -132,20 +133,22 @@ void* ServerThread::run() {
 				} else { //to user
 					if(User::isUserExists(name)) {
 						Utils::writeServerLog(currentUser.getUserName() + " messages " + name);
+
 						if(isUserOnline(name)) {
 							threadPoolMutex.lock();
 							for(unsigned int i = 0; i < threadPool.size(); i++) {
 								if (threadPool.at(i)->threadName == name) {
 									struct Message ms;
 									ms.sender = currentUser.getUserName();
+									ms.time = msgTime;
 									ms.message = msg;
-									threadPool.at(i)->acceptMessage(ms);
+									threadPool[i]->acceptMessage(ms);
 									break;
 								}
 							}
 							threadPoolMutex.unlock();
 						} else {
-							currentUser.dumpMessageTo(name, msg);
+							currentUser.dumpMessageTo(name, msgTime, msg);
 						}
 					} else {
 						//send it does not exist
@@ -223,6 +226,26 @@ void* ServerThread::run() {
 			} else if(currentPackage.getPackageType() == Protocol::messageRecvRequest) {
 				// flush
 				socket->receive(buff, sizeof(buff));
+				if(!currentUser.unseenMessage.empty()) {
+					while(!currentUser.unseenMessage.empty()) {
+						struct Message ms;
+						ms = currentUser.unseenMessage[0];
+
+						MessageRecvPackage response(ms.sender, ms.time, ms.message);
+						response.send(*socket);
+
+						currentUser.unseenMessage.erase(currentUser.unseenMessage.begin());
+					}
+					Package last(Protocol::messageRecvEnd);
+
+					last.send(*socket);
+				} else {
+					// no new messages
+					Package last(Protocol::messageRecvEnd);
+
+					last.send(*socket);
+				}
+
 			} else if (currentPackage.getPackageType() == Protocol::userLogout) {
 				/* Logout */
 				Utils::writeServerLog(threadName + " logged out");
@@ -250,12 +273,24 @@ void* ServerThread::run() {
 void ServerThread::checkNotification(){
 	if(!currentUser.unseenMessage.empty()) {
 		//notify user on new messages from who who who, TODO send via network
+		vector<struct Message>& msgList = currentUser.unseenMessage;
+		while(!msgList.empty()) {
+			struct Message ms = msgList[0];
+
+			MessageRecvPackage package(ms.sender, ms.time, ms.sender);
+			package.send(*socket);
+
+			msgList.erase(msgList.begin());
+		}
+
 		vector<string> userlist = currentUser.getUniqueSenderList();
 		cout << NEW_NOTIFICATION;
 		for (unsigned int i = 0; i < userlist.size();i++) {
 			cout << userlist.at(i) << " ";
 		}
 		cout << endl;
+	} else {
+		// no need to send anything
 	}
 }
 
