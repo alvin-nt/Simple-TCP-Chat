@@ -9,19 +9,18 @@
 #define	_UserInitPackage_H
 
 #include "Package.h"
-#include <openssl/sha.h>
 
 class UserInitPackage : public Package {
 private:
     char username[Protocol::USERNAME_MAXLENGTH];
-    unsigned char passwordHash[SHA512_DIGEST_LENGTH];
+    unsigned char passwordHash[Protocol::USERNAME_MAXLENGTH];
 public:
     UserInitPackage(int packageType = Protocol::userLogin);
     UserInitPackage(const UserInitPackage& orig);
     virtual ~UserInitPackage();
     
     const string getUserName() const;
-    const string getUserPasswordHash() const;
+    const string getUserPassword() const;
     
     void operator=(const UserInitPackage& rhs);
     void operator=(const char* buff);

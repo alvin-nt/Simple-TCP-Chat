@@ -32,12 +32,8 @@ const string UserInitPackage::getUserName() const {
     return string(username, sizeof(username));
 }
 
-const string UserInitPackage::getUserPasswordHash() const {
-    char mdString[SHA512_DIGEST_LENGTH * 2 + 1];
-    
-    for(int i = 0; i < SHA512_DIGEST_LENGTH; i++)
-         sprintf(&mdString[i*2], "%02x", (unsigned int)passwordHash[i]);
-    return string(mdString, sizeof(mdString));
+const string UserInitPackage::getUserPassword() const {
+    return string(passwordHash);
 }
 
 void UserInitPackage::setUserName(const char* username) {
@@ -49,7 +45,7 @@ void UserInitPackage::setUserName(const string& username) {
 }
 
 void UserInitPackage::setUserPassword(const char* password) {
-    SHA512((unsigned char*)password, strlen(password), passwordHash);
+	memcpy(this->passwordHash, password, sizeof(this->passwordHash));
 }
 
 void UserInitPackage::setUserPassword(const string& password) {
