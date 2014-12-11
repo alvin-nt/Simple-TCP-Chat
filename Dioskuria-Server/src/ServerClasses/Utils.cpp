@@ -19,6 +19,13 @@ const string Utils::currentDateTime() {
 	    return buf;
 }
 
+const string Utils::dateTime(const time_t time) {
+	char buf[80];
+	strftime(buf, sizeof(buf), "[%Y-%m-%d %X]", localtime(&time));
+
+	return buf;
+}
+
 void Utils::writeServerLog(string message) {
 	logFileMutex.lock();
 	cout << Utils::currentDateTime() << " " << message << endl;

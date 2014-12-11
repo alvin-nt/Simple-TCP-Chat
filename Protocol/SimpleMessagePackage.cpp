@@ -21,6 +21,12 @@ SimpleMessagePackage::SimpleMessagePackage(const SimpleMessagePackage& orig)
     message = orig.message;
 }
 
+SimpleMessagePackage::SimpleMessagePackage(const char* buff)
+	: Package(buff)
+{
+	readData(buff);
+}
+
 SimpleMessagePackage::~SimpleMessagePackage()
 {
     

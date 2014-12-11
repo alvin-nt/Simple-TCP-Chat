@@ -10,7 +10,12 @@ src/ServerThread.d: ../src/ServerThread.cpp ../src/ServerThread.h \
  ../src/ServerClasses/../ServerClasses/Group.h \
  ../src/ServerClasses/../ServerClasses/User.h \
  ../src/ServerClasses/Utils.h ../src/ServerClasses/MessageProcessor.h \
- ../src/ServerClasses/Mutexes.h ../src/Constants.h ../src/globals.h
+ ../src/ServerClasses/Mutexes.h ../src/Constants.h ../src/globals.h \
+ ../src/Protocol/SimpleMessagePackage.h ../src/Protocol/Package.h \
+ ../src/Protocol/GroupCreatePackage.h ../src/Protocol/GroupJoinPackage.h \
+ ../src/Protocol/UserInitPackage.h ../src/Protocol/UserIdPackage.h \
+ ../src/Protocol/MessageSendPackage.h \
+ ../src/Protocol/MessageRecvPackage.h
 
 ../src/ServerThread.h:
 
@@ -57,3 +62,19 @@ src/ServerThread.d: ../src/ServerThread.cpp ../src/ServerThread.h \
 ../src/Constants.h:
 
 ../src/globals.h:
+
+../src/Protocol/SimpleMessagePackage.h:
+
+../src/Protocol/Package.h:
+
+../src/Protocol/GroupCreatePackage.h:
+
+../src/Protocol/GroupJoinPackage.h:
+
+../src/Protocol/UserInitPackage.h:
+
+../src/Protocol/UserIdPackage.h:
+
+../src/Protocol/MessageSendPackage.h:
+
+../src/Protocol/MessageRecvPackage.h:

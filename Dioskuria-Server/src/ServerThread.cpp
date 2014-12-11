@@ -6,6 +6,15 @@
  */
 
 #include "ServerThread.h"
+
+#include "Protocol/SimpleMessagePackage.h"
+#include "Protocol/GroupCreatePackage.h"
+#include "Protocol/GroupJoinPackage.h"
+#include "Protocol/UserInitPackage.h"
+#include "Protocol/UserIdPackage.h"
+#include "Protocol/MessageSendPackage.h"
+#include "Protocol/MessageRecvPackage.h"
+
 #include <cstring>
 
 using namespace std;
@@ -24,14 +33,16 @@ ServerThread::~ServerThread() {
 }
 
 void* ServerThread::run() {
-	string username,password;
 	while (true) {
-		cout << "Client connected" << endl;
 		//TODO main loop thread, process query by package
 		try {
-			Package currentPackage(socket->receive());
+			char buff[512] = {};
 
-			char timeBuff[100];
+			socket->receive(buff, sizeof(buff), MSG_PEEK);
+
+			Package currentPackage = buff;
+
+			/*char timeBuff[100];
 			memset(timeBuff, 0, sizeof(timeBuff));
 			time_t packageTime = currentPackage.getPackageTime();
 
@@ -40,24 +51,35 @@ void* ServerThread::run() {
 			cout << "--- Received package stats --- " << endl
 				 << "packageNum: " << currentPackage.getPackageType() << endl
 				 << "packageTime: " << timeBuff << endl
-				 << "--- End of package stats --- " << endl;
+				 << "--- End of package stats --- " << endl;*/
 			if(currentPackage.getPackageType() == Protocol::userSignup) {
 				/* Signup */
 				/* Receive packet contains username password */
-				cin >> username >> password;
+				// flush first
+				socket->receive(buff, sizeof(buff));
+
+				UserInitPackage package = buff;
+
+				string username = package.getUserName();
+				string password = package.getUserPassword();
+
 				if(Group::isGroupExists(username)) {
 					//TODO signup fail, add signup fail message?
-					Package reply(Protocol::userSignupFail);
+					SimpleMessagePackage reply(Protocol::userSignupFail);
+
+					reply.setMessage("IT IS GROUP NAME");
 					reply.send(*socket);
-					cout << "IT IS GROUP NAME" << endl;
 				} else {
 					if (currentUser.newUser(username, password) == USER_SIGNUP_SUCCESS) {
 						threadName = username;
 						Package reply(Protocol::userSignupSuccess);
+
+						// TODO: generate user id here
 						reply.send(*socket);
 					} else {
 						//TODO signup fail, add signup fail message?
-						Package reply(Protocol::userSignupFail);
+						SimpleMessagePackage reply(Protocol::userSignupFail);
+
 						reply.send(*socket);
 					}
 				}
@@ -65,8 +87,13 @@ void* ServerThread::run() {
 				cout << "logging in..." << endl;
 				/* Login */
 				/* Receive packet contains username password */
-				username = "dafuq";
-				password = "string";
+				socket->receive(buff, sizeof(buff));
+
+				UserInitPackage package = buff;
+
+				string username = package.getUserName();
+				string password = package.getUserPassword();
+
 				if(currentUser.login(username, password) == USER_LOGIN_SUCCESS) {
 					Package reply(Protocol::userLoginSuccess);
 					reply.send(*socket);
@@ -74,88 +101,169 @@ void* ServerThread::run() {
 					threadName = username;
 					currentUser.loadMessages();
 					checkNotification();
-
-					cout << USER_LOGIN_SUCCESS << endl;
+					Utils::writeServerLog(username + " has logged in");
 				} else {
 					//send login failed
-					Package reply(Protocol::userLoginFail);
+					SimpleMessagePackage reply(Protocol::userLoginFail);
+
+					reply.setMessage("Login failed");
 					reply.send(*socket);
+
 					cout << USER_LOGIN_INVALID << endl;
 				}
-			} else if (currentPackage.getPackageType() == Protocol::messageRecv) {
+			} else if (currentPackage.getPackageType() == Protocol::messageSend) {
 				/* User sends message */
 				/* if user is present (threadlist) then send to its queue,
 				 * else call the currentUser.dumpMessageTo(targetUser)
 				 */
-				string name;
-				string msg;
-				//msg = currentUser.getUserName() + " : " + message;
+				MessageSendPackage package = buff;
+
+				socket->receive(buff, sizeof(buff));
+
+				string name = package.getReceiver();
+				time_t msgTime = package.getPackageTime();
+				string message = package.getMessage();
+				string msg = currentUser.getUserName() + " : " + message;
+				cout << msg << endl;
 				bool isGroupName = Group::isGroupExists(name);
 				if (isGroupName) {
-					Group* temp;
-					temp = Group::getGroup("red-dot");
+					Group* temp = Group::getGroup(name);
 					if(temp != NULL) {
 						temp->broadcast(currentUser,msg);
+						SimpleMessagePackage reply(Protocol::messageSendSuccess);
+						reply.send(*socket);
+
 					}
 				} else { //to user
 					if(User::isUserExists(name)) {
-						Utils::writeServerLog(currentUser.getUserName()+" messages "+name);
+						Utils::writeServerLog(currentUser.getUserName() + " messages " + name);
+
 						if(isUserOnline(name)) {
 							threadPoolMutex.lock();
 							for(unsigned int i = 0; i < threadPool.size(); i++) {
 								if (threadPool.at(i)->threadName == name) {
 									struct Message ms;
 									ms.sender = currentUser.getUserName();
+									ms.time = msgTime;
 									ms.message = msg;
-									threadPool.at(i)->acceptMessage(ms);
+									threadPool[i]->acceptMessage(ms);
+									SimpleMessagePackage reply(Protocol::messageSendSuccess);
+									reply.send(*socket);
 									break;
 								}
 							}
 							threadPoolMutex.unlock();
 						} else {
-							currentUser.dumpMessageTo(name, msg);
+							currentUser.dumpMessageTo(name, msgTime, msg);
+							SimpleMessagePackage reply(Protocol::messageSendSuccess);
+							reply.send(*socket);
 						}
 					} else {
 						//send it does not exist
+						SimpleMessagePackage reply(Protocol::messageSendFailed);
+						reply.send(*socket);
 					}
 				}
 			} else if (currentPackage.getPackageType() == Protocol::groupCreate) {
 				/* User create group */
-				//Proto
-				/*
-				 Group::createGroup(currentUser, "name");
-				 */
+				// flush
+				socket->receive(buff, sizeof(buff));
+
+				GroupCreatePackage package = buff;
+				if(Group::createGroup(currentUser, package.getGroupName())) {
+					UserIdPackage reply(Protocol::groupCreateSuccess, 0);
+					// TODO: generate the group id here
+					reply.send(*socket);
+				} else {
+					UserIdPackage reply(Protocol::groupCreateFail, 0);
+
+					reply.send(*socket);
+				}
 			} else if (currentPackage.getPackageType() == Protocol::groupJoin) {
 				/* User join group */
-				//Proto
-				/*
-				 Group::isGroupExists(name);
-				 getgroupnum;
-				 group.joinGroup(currentUser);
-				 */
-			} else if (currentPackage.getPackageType() == Protocol::groupLeave) {
-				/* User leave group */
-				//Proto
-				/*
-				grouplookup;
-				if(group.checkMembership(currentUser)) {
-					group.leaveGroup(currentUser);
+				// flush
+				socket->receive(buff, sizeof(buff));
+
+				GroupJoinPackage package = buff;
+
+				if(Group::isGroupExists(package.getGroupName())) {
+					Group* group = Group::getGroup(package.getGroupName());
+					if(group->checkMembership(currentUser)) {
+						SimpleMessagePackage response(Protocol::groupJoinFail);
+
+						response.setMessage("Already joined in group " + group->getGroupName());
+						response.send(*socket);
+					} else {
+						group->joinGroup(currentUser);
+
+						Package response(Protocol::groupJoinSuccess);
+
+						response.send(*socket);
+					}
+				} else {
+					SimpleMessagePackage response(Protocol::groupJoinFail);
+
+					response.setMessage("Group " + package.getGroupName() + " does not exist");
+					response.send(*socket);
 				}
-				 */
-			}
-		//else if parse request message
-			/* User asks for messages */
-			/* TODO parse packet to string requestFor */
-				/*
-				string requestFor;
-				vector<string> messages;
-				messages = currentUser.getMessageFrom(requestFor);
-				//do some sending back to client
-				 */
-			else if (currentPackage.getPackageType() == Protocol::userLogout) {
+			} else if (currentPackage.getPackageType() == Protocol::groupLeave) {
+				/* User join group */
+				// flush
+				socket->receive(buff, sizeof(buff));
+
+				// abusing this package class
+				SimpleMessagePackage package = buff;
+
+				if(Group::isGroupExists(package.getMessage())) {
+					Group* group = Group::getGroup(package.getMessage());
+					if(group->checkMembership(currentUser)) {
+						group->leaveGroup(currentUser);
+						Package response(Protocol::groupLeaveSuccess);
+
+						response.send(*socket);
+					} else {
+						SimpleMessagePackage response(Protocol::groupLeaveFail);
+
+						response.setMessage("You are not a member of " + group->getGroupName());
+						response.send(*socket);
+					}
+				} else {
+					SimpleMessagePackage response(Protocol::groupLeaveFail);
+
+					response.setMessage("Group " + package.getMessage() + " does not exist");
+					response.send(*socket);
+				}
+			} else if(currentPackage.getPackageType() == Protocol::messageRecvRequest) {
+				// flush
+				socket->receive(buff, sizeof(buff));
+				if(!currentUser.unseenMessage.empty()) {
+					while(!currentUser.unseenMessage.empty()) {
+						struct Message ms;
+						ms = currentUser.unseenMessage[0];
+
+						MessageRecvPackage response(ms.sender, ms.time, ms.message);
+						response.send(*socket);
+
+						currentUser.unseenMessage.erase(currentUser.unseenMessage.begin());
+					}
+					Package last(Protocol::messageRecvEnd);
+
+					last.send(*socket);
+				} else {
+					// no new messages
+					Package last(Protocol::messageRecvEnd);
+
+					last.send(*socket);
+				}
+
+			} else if (currentPackage.getPackageType() == Protocol::userLogout) {
 				/* Logout */
-				Utils::writeServerLog(username + " logged out");
+				Utils::writeServerLog(threadName + " logged out");
 				break;
+			}
+			else {
+				//flush
+				socket->receive(buff, sizeof(buff));
 			}
 		} catch (SocketException& e) {
 			cerr << "Caught SocketException: " << e.what() << endl;
@@ -179,12 +287,24 @@ void* ServerThread::run() {
 void ServerThread::checkNotification(){
 	if(!currentUser.unseenMessage.empty()) {
 		//notify user on new messages from who who who, TODO send via network
+		vector<struct Message>& msgList = currentUser.unseenMessage;
+		while(!msgList.empty()) {
+			struct Message ms = msgList[0];
+
+			MessageRecvPackage package(ms.sender, ms.time, ms.sender);
+			package.send(*socket);
+
+			msgList.erase(msgList.begin());
+		}
+
 		vector<string> userlist = currentUser.getUniqueSenderList();
 		cout << NEW_NOTIFICATION;
 		for (unsigned int i = 0; i < userlist.size();i++) {
 			cout << userlist.at(i) << " ";
 		}
 		cout << endl;
+	} else {
+		// no need to send anything
 	}
 }
 

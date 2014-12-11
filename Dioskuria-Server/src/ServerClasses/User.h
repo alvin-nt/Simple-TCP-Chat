@@ -34,7 +34,7 @@ public:
 	string createUser();
 	void loadMessages();
 	vector<string> getMessageFrom(string user);
-	void dumpMessageTo(string user, string message);
+	void dumpMessageTo(string user, time_t msgTime, string message);
 	void dumpMessageTo(string groupname, string user, string message);
 	vector<string> getUniqueSenderList();
 
@@ -45,17 +45,16 @@ public:
 private:
 	string username;
 	string password;
-	//TODO add other attributes
 
+	// TODO: add other attributes
 
 	bool queryUser();
 	void clearMessageFile();
-
-
 };
 
 struct Message {
 	string sender;
+	time_t time;
 	string message;
 };
 

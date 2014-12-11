@@ -17,7 +17,7 @@ public:
 	 * Initializes an empty package
 	 * @param packageType the type of package, as defined in {@link Protocol}
 	 */
-	Package(int packageType);
+	Package(int packageType = -1);
 
 	/**
 	 * Clones a package

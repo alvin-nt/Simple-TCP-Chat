@@ -108,13 +108,12 @@ namespace Protocol {
  * messageNum used when sending message
  * 
  * The data structure is as follows:
- * [senderId][receiverId][offset][message]
+ * [receiver][offset][message]
  *
- * senderId (int - 4 byte): the userId of the sender
- * receiverId (int - 4 byte): the userId of the receiver
+ * receiver (char - 64 byte): name of the receiver
  * offset (char - 1 byte): '1' (0x31) indicates that there is a next packet that contains the next part of the message, 
  * 						   '0' (0x30) indicates otherwise
- * message (any - 494 byte): the message
+ * message (any - 439 byte): the message
  *
  * Since C operates on null-terminated string,
  * If the last package (offset = 0) received by the receiver does not contain a null (\0),
@@ -133,6 +132,10 @@ namespace Protocol {
  */
 	static const int messageSend = 31;
 
+	static const int messageSendSuccess = 32;
+
+	static const int messageSendFailed = 33;
+
 /**
  * messageNum used when a message is read by the client
  *
@@ -141,21 +144,30 @@ namespace Protocol {
  *
  * messageId (messageId - 16 byte): the messageId
  */
-	static const int messageRead = 33;
+	static const int messageRead = 34;
+
+/**
+ * messageNum used when requesting for received message
+ *
+ * no data structure
+ */
+	static const int messageRecvRequest = 35;
 
 /**
  * messageNum used when sending received message to the client
  * 
  * The data structure is described below:
- * [messageId][offset][message][empty]
+ * [sender][time][offset][message]
  *
- * messageId (messageId - 16 byte): the messageId
+ * receiver (char - 64 byte): the name of the sender
+ * time (time_t - 4 byte): time when the message is sent
  * offset (char - 1 byte): '1' (0x31) indicates that there is a next packet that contains the next part of the message, 
  * 						   '0' (0x30) indicates otherwise
- * empty (char - 1 byte): filled with NULL '\0'						   
- * message (any - 486 byte): the message, may not be null-terminated
+ * message (any - 445 byte): the message, may not be null-terminated
  */
-	static const int messageRecv = 35;
+	static const int messageRecv = 36;
+
+	static const int messageRecvEnd = 37;
 
 /**
  * messageNum used when creating groups
@@ -258,7 +270,7 @@ namespace Protocol {
  * [groupId][recvId][offset][message]
  *
  * groupId (int - 4 byte): target groupId
- * recvId (int - 4 byte): userId of the receiver
+ * recvId (char - 64 byte): name of the receiver
  * offset (char - 1 byte): '1' indicates that the message is continued, 
  * message (any - 494 byte): the message
  */
