@@ -27,3 +27,13 @@ string& ProtocolUtils::ltrim(string& str) {
 	return str;
 }
 
+string& ProtocolUtils::rtrim(string& str) {
+	str.erase(find_if(str.rbegin(), str.rend(), not1(ptr_fun<int, int>(isspace))).base(), str.end());
+	str.erase(find_if(str.rbegin(), str.rend(), not1('\0')).base(), str.end());
+
+	return str;
+}
+
+string& ProtocolUtils::trim(string& str) {
+	return ltrim(rtrim(str));
+}
