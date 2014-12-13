@@ -260,8 +260,7 @@ void* ServerThread::run() {
 				/* Logout */
 				Utils::writeServerLog(threadName + " logged out");
 				break;
-			}
-			else {
+			} else {
 				//flush
 				socket->receive(buff, sizeof(buff));
 			}

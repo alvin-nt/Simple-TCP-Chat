@@ -91,7 +91,7 @@ ssize_t MessageSendPackage::send(TCPStream& stream) const {
         memset(buff, 0, sizeof(buff));
 
         bool end = (remainder < maxMessageSize);
-        size_t copySize = end ? remainder : maxMessageSize;
+        size_t copySize = end ? maxMessageSize : remainder;
 
         // copy the string
         writeData(buff, end, offset, copySize);
