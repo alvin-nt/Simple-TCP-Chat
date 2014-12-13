@@ -8,13 +8,6 @@
 #ifndef SRC_DIOSKURIASERVER_H_
 #define SRC_DIOSKURIASERVER_H_
 
-#include "ServerThread.h"
-#include "Protocol/TCPAcceptor.h"
-#include "globals.h"
-#include <vector>
-
-using namespace std;
-
 class DioskuriaServer {
 public:
 	DioskuriaServer(int PORT);

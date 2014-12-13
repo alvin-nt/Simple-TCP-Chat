@@ -11,7 +11,9 @@ using namespace std;
 
 int main() {
 	int PORT=18213;
-	new DioskuriaServer(PORT);
+	DioskuriaServer server = new DioskuriaServer(PORT);
+	delete server;
+
 	return 0;
 }
 

@@ -6,8 +6,12 @@
  */
 
 #include "DioskuriaServer.h"
+#include "Protocol/TCPAcceptor.h"
+#include "Protocol/TCPStream.h"
 #include "ServerClasses/Utils.h"
-
+#include "ServerThread.h"
+#include "globals.h"
+#include <vector>
 
 using namespace std;
 
