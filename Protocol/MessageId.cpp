@@ -6,7 +6,7 @@ MessageId::MessageId() {
     receiverId = 0;
     receiverType = RECEIVER_USER;
 
-    for(int i = 0; i < sizeof(empty); i++) {
+    for(unsigned int i = 0; i < sizeof(empty); i++) {
             empty[i] = '\0';
     }
 };
@@ -17,7 +17,7 @@ MessageId::MessageId(int senderId, int receiverId, char receiverType) {
     this->receiverId = receiverId;
     this->receiverType = receiverType;
     
-    for(int i = 0; i < sizeof(empty); i++) {
+    for(unsigned int i = 0; i < sizeof(empty); i++) {
         empty[i] = '\0';
     }
 }

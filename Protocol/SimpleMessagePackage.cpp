@@ -6,6 +6,7 @@
  */
 
 #include "SimpleMessagePackage.h"
+#include "ProtocolUtils.h"
 #include <string>
 #include <algorithm>
 
@@ -50,4 +51,5 @@ void SimpleMessagePackage::readData(const char* buff) {
     Package::readData(buff);
     
     message = string(&buff[dataOffset], dataSize);
+    ProtocolUtils::trim(message);
 }

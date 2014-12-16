@@ -55,7 +55,7 @@ Package TCPStream::receive() {
 	char buff[Package::getPackageSize()];
 	memset(buff, 0, sizeof(buff));
 
-	assert(receive(buff, sizeof(buff)) == sizeof(buff));
+	assert((unsigned)receive(buff, sizeof(buff)) == sizeof(buff));
 	Package package(buff);
 
 	return package;
