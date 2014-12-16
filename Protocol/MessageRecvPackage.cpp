@@ -6,6 +6,7 @@
  */
 
 #include "MessageRecvPackage.h"
+#include "ProtocolUtils.h"
 #include <cstring>
 #include <algorithm>
 #include <cassert>
@@ -52,7 +53,7 @@ void MessageRecvPackage::setMessageSender(const string& sender) {
 }
 
 void MessageRecvPackage::setMessageSender(const char* sender) {
-	copy(sender, sender + sizeof(this->sender), this->sender);
+	copy(sender, sender + strnlen(sender, sizeof(this->sender)), this->sender);
 }
 
 string MessageRecvPackage::getMessageSender() const {
@@ -125,7 +126,13 @@ ssize_t MessageRecvPackage::receive(MessageRecvPackage& package, TCPStream& stre
 		assert(package.packageType == packageType);
 		assert(package.packageTime == packageTime);
 
-		assert(string(package.sender, sizeof(package.sender)) == string(sender, Protocol::USERNAME_MAXLENGTH));
+		string original(package.sender);
+		original = ProtocolUtils::trim(original);
+
+		string compare(sender, Protocol::USERNAME_MAXLENGTH);
+		compare = ProtocolUtils::trim(compare);
+
+		assert(original == compare);
 
 		package.readData(buff);
 	}
@@ -153,5 +160,7 @@ void MessageRecvPackage::readData(const char* buff) {
     time_t* msgTimePtr = (time_t*)&buff[dataOffset + sizeof(sender)];
     messageTime = *msgTimePtr;
 
-    message += string(&buff[messageOffset], maxMessageSize);
+    string messageAppend(&buff[messageOffset], maxMessageSize);
+
+    message += ProtocolUtils::trim(messageAppend);
 }

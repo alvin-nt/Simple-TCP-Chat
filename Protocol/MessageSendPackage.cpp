@@ -1,4 +1,5 @@
 #include "MessageSendPackage.h"
+#include "ProtocolUtils.h"
 
 #include <cstring>
 #include <cassert>
@@ -128,7 +129,11 @@ void MessageSendPackage::receive(MessageSendPackage& package, TCPStream& stream)
             assert(package.packageType == packageType);
             assert(package.packageTime == packageTime);
 
-            assert(string(package.recvName) == string(recvName, Protocol::USERNAME_MAXLENGTH));
+            string original(package.recvName);
+            string compare(recvName, Protocol::USERNAME_MAXLENGTH);
+            compare = ProtocolUtils::trim(compare);
+
+            assert(original == compare);
 
             package.readData(buff);
         }
@@ -160,5 +165,8 @@ void MessageSendPackage::readData(const char* buff) {
     
     memcpy(recvName, &buff[dataOffset], sizeof(recvName));
     
-    message += string(&buff[messageOffset], maxMessageSize);
+    string messageAppend(&buff[messageOffset], maxMessageSize);
+
+    message += ProtocolUtils::trim(messageAppend);
 }
+

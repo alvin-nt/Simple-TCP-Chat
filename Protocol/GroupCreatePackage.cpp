@@ -6,18 +6,23 @@
  */
 
 #include "GroupCreatePackage.h"
+#include "ProtocolUtils.h"
+
 #include <algorithm>
+#include <cstring>
+
+using namespace std;
 
 GroupCreatePackage::GroupCreatePackage(const string& creatorName, const string& groupName, const string& description)
         : Package(Protocol::groupCreate)
 {
 	string copyStr = creatorName.substr(0, Protocol::USERNAME_MAXLENGTH);
 
-	std::copy(copyStr.begin(), copyStr.end(), this->creatorName);
+	copy(copyStr.begin(), copyStr.end(), this->creatorName);
 
     copyStr = groupName.substr(0, Protocol::USERNAME_MAXLENGTH);
     
-    std::copy(copyStr.begin(), copyStr.end(), this->groupName);
+    copy(copyStr.begin(), copyStr.end(), this->groupName);
     
     this->description = description.substr(0, dataSize - (Protocol::USERNAME_MAXLENGTH << 1));
 }
@@ -52,11 +57,14 @@ void GroupCreatePackage::operator=(const char* buff)
 }
 
 string GroupCreatePackage::getCreatorName() const {
-    return string(creatorName, sizeof(creatorName));
+	string ret(creatorName, sizeof(creatorName));
+	ret = ProtocolUtils::trim(ret);
+
+    return ret;
 }
 
 void GroupCreatePackage::setCreatorName(const char* creatorName) {
-    std::copy(creatorName, creatorName + sizeof(this->creatorName), this->creatorName);
+    copy(creatorName, creatorName + strnlen(creatorName, sizeof(this->creatorName)), this->creatorName);
 }
 
 void GroupCreatePackage::setCreatorName(const string& creatorName) {
@@ -64,7 +72,10 @@ void GroupCreatePackage::setCreatorName(const string& creatorName) {
 }
 
 const string GroupCreatePackage::getGroupName() const {
-    return string(groupName, sizeof(groupName));
+	string ret(groupName, sizeof(groupName));
+	ret = ProtocolUtils::trim(ret);
+
+	return ret;
 }
 
 void GroupCreatePackage::setGroupName(const string& groupName) {
@@ -94,11 +105,12 @@ void GroupCreatePackage::writeData(char* buff) const {
 void GroupCreatePackage::readData(const char* buff) {
     Package::readData(buff);
     
-    std::copy(&buff[dataOffset], &buff[dataOffset] + sizeof(creatorName), creatorName);
+    copy(&buff[dataOffset], &buff[dataOffset] + sizeof(creatorName), creatorName);
     
-    std::copy(&buff[dataOffset + sizeof(creatorName)],
+    copy(&buff[dataOffset + sizeof(creatorName)],
             &buff[dataOffset + sizeof(creatorName)] + sizeof(groupName), groupName);
     
     description = string(&buff[dataOffset + sizeof(creatorName) + sizeof(groupName)],
                             dataSize - sizeof(creatorName) - sizeof(groupName));
+    description = ProtocolUtils::trim(description);
 }

@@ -6,8 +6,10 @@
  */
 
 #include "GroupJoinPackage.h"
+#include "ProtocolUtils.h"
 
 #include <algorithm>
+#include <cstring>
 
 using namespace std;
 
@@ -49,7 +51,7 @@ string GroupJoinPackage::getUserName() const {
     return string(userName, sizeof(userName));
 }
 void GroupJoinPackage::setUserName(const char* userName) {
-    copy(userName, userName + sizeof(this->userName), this->userName);
+    copy(userName, userName + strnlen(userName, sizeof(this->userName)), this->userName);
 }
 
 void GroupJoinPackage::setUserName(const string& userName) {
@@ -57,7 +59,10 @@ void GroupJoinPackage::setUserName(const string& userName) {
 }
 
 const string GroupJoinPackage::getGroupName() const {
-    return string(groupName, sizeof(groupName));
+	string ret(groupName, sizeof(groupName));
+	ret = ProtocolUtils::trim(ret);
+
+    return ret;
 }
 
 void GroupJoinPackage::setGroupName(const string& groupName) {

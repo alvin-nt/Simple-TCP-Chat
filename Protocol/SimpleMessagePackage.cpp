@@ -51,5 +51,5 @@ void SimpleMessagePackage::readData(const char* buff) {
     Package::readData(buff);
     
     message = string(&buff[dataOffset], dataSize);
-    ProtocolUtils::trim(message);
+    message = ProtocolUtils::trim(message);
 }

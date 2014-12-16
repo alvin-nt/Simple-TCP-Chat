@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <cstring>
 #include <exception>
+#include <sstream>
 
 using namespace std;
 
@@ -35,15 +36,27 @@ UserInitPackage::~UserInitPackage() {
 }
 
 const string UserInitPackage::getUserName() const {
-    return string(username, sizeof(username));
+	stringstream ss;
+	for(unsigned i = 0; i < sizeof(username); i++) {
+		if(username[i] != 0x00)
+			ss << username[i];
+	}
+
+    return ss.str();
 }
 
 const string UserInitPackage::getUserPassword() const {
-    return string(passwordHash);
+	stringstream ss;
+	for(unsigned i = 0; i < sizeof(passwordHash); i++) {
+		if(passwordHash[i] != 0x00)
+			ss << passwordHash[i];
+	}
+
+    return ss.str();
 }
 
 void UserInitPackage::setUserName(const char* username) {
-    copy(username, username + Protocol::USERNAME_MAXLENGTH, this->username);
+    copy(username, username + strnlen(username, sizeof(this->username)), this->username);
 }
 
 void UserInitPackage::setUserName(const string& username) {
@@ -51,7 +64,7 @@ void UserInitPackage::setUserName(const string& username) {
 }
 
 void UserInitPackage::setUserPassword(const char* password) {
-	memcpy(this->passwordHash, password, sizeof(this->passwordHash));
+	copy(password, password + strnlen(password, sizeof(this->passwordHash)), this->passwordHash);
 }
 
 void UserInitPackage::setUserPassword(const string& password) {
