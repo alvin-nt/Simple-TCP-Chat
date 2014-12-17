@@ -79,7 +79,10 @@ void MessageSendPackage::setReceiver(const string& receiver) {
 }
 
 string MessageSendPackage::getReceiver() const {
-	return string(recvName);
+	string ret(recvName);
+	ret = ProtocolUtils::trim(ret);
+
+	return ret;
 }
 
 ssize_t MessageSendPackage::send(TCPStream& stream) const {
@@ -92,7 +95,7 @@ ssize_t MessageSendPackage::send(TCPStream& stream) const {
         memset(buff, 0, sizeof(buff));
 
         bool end = (remainder < maxMessageSize);
-        size_t copySize = end ? maxMessageSize : remainder;
+        size_t copySize = end ? remainder : maxMessageSize;
 
         // copy the string
         writeData(buff, end, offset, copySize);
@@ -167,6 +170,9 @@ void MessageSendPackage::readData(const char* buff) {
     
     string messageAppend(&buff[messageOffset], maxMessageSize);
 
-    message += ProtocolUtils::trim(messageAppend);
+    if(message.empty())
+    	message = ProtocolUtils::trim(messageAppend);
+    else
+    	message += ProtocolUtils::trim(messageAppend);
 }
 

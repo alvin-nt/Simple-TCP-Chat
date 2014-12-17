@@ -36,13 +36,12 @@ string& ProtocolUtils::rtrim(string& str) {
 }
 
 string& ProtocolUtils::trim(string& str) {
-	str = ltrim(rtrim(str));
+	//str = ltrim(rtrim(str));
 
-	stringstream ss(ios::in);
-	for(char c: str) {
-		if(c != 0x00) {
-			ss << c;
-		}
+	stringstream ss;
+	for(auto i = 0; i < str.length(); i++) {
+		if(str[i] != '\0')
+			ss << str[i];
 	}
 
 	str = ss.str();

@@ -72,19 +72,19 @@ bool Group::isGroupExists(string name) {
 
 
 void Group::joinGroup(User user) {
-	thisGroupFileMutex.lock();
+	//thisGroupFileMutex.lock();
 	string fileName = "group-" + groupName + ".txt";
 	ofstream thisGroupFile;
 	thisGroupFile.open(fileName.c_str(),ofstream::app);
 	thisGroupFile << user.getUserName() << endl;
 	thisGroupFile.close();
-	thisGroupFileMutex.unlock();
+	//thisGroupFileMutex.unlock();
 	Utils::writeServerLog(user.getUserName()+" joined "+groupName);
 }
 
 void Group::leaveGroup(User user) {
-	thisGroupFileMutex.lock();
-	groupListMutex.lock();
+	//thisGroupFileMutex.lock();
+	//groupListMutex.lock();
 	for(unsigned i = 0; i < members.size(); i++) {
 		if (members.at(i).getUserName() == user.getUserName()) {
 			members.erase(members.begin()+i);
@@ -114,7 +114,7 @@ void Group::leaveGroup(User user) {
 	//check for empty group
 	if(members.size() == 0) {
 		Utils::writeServerLog(groupName+" has zero member, deleting group");
-		groupFileMutex.lock();
+		//groupFileMutex.lock();
 		string filename = "GroupList.txt";
 		string filename2 = "GroupList.temp";
 		string filename3 = "group-" + groupName + ".txt";
@@ -141,16 +141,16 @@ void Group::leaveGroup(User user) {
 			}
 		}
 
-		groupFileMutex.unlock();
+		//groupFileMutex.unlock();
 	}
 
-	thisGroupFileMutex.unlock();
-	groupListMutex.unlock();
+	//thisGroupFileMutex.unlock();
+	//groupListMutex.unlock();
 
 }
 
 bool Group::checkMembership(User user) {
-	groupListMutex.lock();
+	//groupListMutex.lock();
 	bool found = false;
 	for(unsigned i = 0; i < members.size(); i++) {
 		if (members.at(i).getUserName() == user.getUserName()) {
@@ -158,7 +158,7 @@ bool Group::checkMembership(User user) {
 			break;
 		}
 	}
-	groupListMutex.unlock();
+	//groupListMutex.unlock();
 	return found;
 }
 
@@ -167,7 +167,7 @@ void Group::broadcast(User broadcaster, string message) {
 	for(unsigned int i = 0 ; i < members.size(); i++) {
 		if(members.at(i).getUserName() != broadcaster.getUserName()) {
 			if(isUserOnline(members.at(i))) {
-				threadPoolMutex.lock();
+	//			threadPoolMutex.lock();
 				for(unsigned int j = 0; j < threadPool.size();j++) {
 					if(threadPool.at(j)->threadName == members.at(i).getUserName()) {
 						struct Message temp;
@@ -177,7 +177,7 @@ void Group::broadcast(User broadcaster, string message) {
 						break;
 					}
 				}
-				threadPoolMutex.unlock();
+	//			threadPoolMutex.unlock();
 			} else {
 				string msg = broadcaster.getUserName()+" : "+message;
 				broadcaster.dumpMessageTo(groupName,members.at(i).getUserName(),msg);
@@ -187,12 +187,12 @@ void Group::broadcast(User broadcaster, string message) {
 }
 
 Group* Group::getGroup(string name) {
-	groupListMutex.lock();
+	//groupListMutex.lock();
 	for(unsigned int i = 0; i < groupList.size();i++) {
 		if(groupList.at(i)->getGroupName() == name) {
 			return groupList.at(i);
 		}
 	}
 	return NULL;
-	groupListMutex.unlock();
+	//groupListMutex.unlock();
 }

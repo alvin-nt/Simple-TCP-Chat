@@ -48,7 +48,10 @@ void GroupJoinPackage::operator=(const char* buff) {
 }
 
 string GroupJoinPackage::getUserName() const {
-    return string(userName, sizeof(userName));
+	string str(userName, sizeof(userName));
+	str = ProtocolUtils::trim(str);
+
+    return str;
 }
 void GroupJoinPackage::setUserName(const char* userName) {
     copy(userName, userName + strnlen(userName, sizeof(this->userName)), this->userName);

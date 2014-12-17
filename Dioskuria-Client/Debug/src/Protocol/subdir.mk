@@ -12,6 +12,7 @@ CPP_SRCS += \
 ../src/Protocol/MessageRecvPackage.cpp \
 ../src/Protocol/MessageSendPackage.cpp \
 ../src/Protocol/Package.cpp \
+../src/Protocol/ProtocolUtils.cpp \
 ../src/Protocol/SimpleMessagePackage.cpp \
 ../src/Protocol/SocketException.cpp \
 ../src/Protocol/TCPAcceptor.cpp \
@@ -29,6 +30,7 @@ OBJS += \
 ./src/Protocol/MessageRecvPackage.o \
 ./src/Protocol/MessageSendPackage.o \
 ./src/Protocol/Package.o \
+./src/Protocol/ProtocolUtils.o \
 ./src/Protocol/SimpleMessagePackage.o \
 ./src/Protocol/SocketException.o \
 ./src/Protocol/TCPAcceptor.o \
@@ -46,6 +48,7 @@ CPP_DEPS += \
 ./src/Protocol/MessageRecvPackage.d \
 ./src/Protocol/MessageSendPackage.d \
 ./src/Protocol/Package.d \
+./src/Protocol/ProtocolUtils.d \
 ./src/Protocol/SimpleMessagePackage.d \
 ./src/Protocol/SocketException.d \
 ./src/Protocol/TCPAcceptor.d \

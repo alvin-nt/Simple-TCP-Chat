@@ -1,9 +1,9 @@
-src/Protocol/MessageSendPackage.d: ../src/Protocol/MessageSendPackage.cpp \
- ../src/Protocol/MessageSendPackage.h ../src/Protocol/Package.h \
+src/Protocol/GroupJoinPackage.d: ../src/Protocol/GroupJoinPackage.cpp \
+ ../src/Protocol/GroupJoinPackage.h ../src/Protocol/Package.h \
  ../src/Protocol/Protocol.h ../src/Protocol/TCPStream.h \
  ../src/Protocol/ProtocolUtils.h
 
-../src/Protocol/MessageSendPackage.h:
+../src/Protocol/GroupJoinPackage.h:
 
 ../src/Protocol/Package.h:
 

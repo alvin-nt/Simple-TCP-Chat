@@ -36,7 +36,8 @@ void* ServerThread::run() {
 	while (true) {
 		//TODO main loop thread, process query by package
 		try {
-			char buff[512] = {};
+			char buff[512];
+			memset(buff, 0, sizeof(buff));
 
 			socket->receive(buff, sizeof(buff), MSG_PEEK);
 
@@ -56,6 +57,7 @@ void* ServerThread::run() {
 				/* Signup */
 				/* Receive packet contains username password */
 				// flush first
+				memset(buff, 0, sizeof(buff));
 				socket->receive(buff, sizeof(buff));
 
 				UserInitPackage package = buff;
@@ -87,6 +89,7 @@ void* ServerThread::run() {
 				cout << "logging in..." << endl;
 				/* Login */
 				/* Receive packet contains username password */
+				memset(buff, 0, sizeof(buff));
 				socket->receive(buff, sizeof(buff));
 
 				UserInitPackage package = buff;
@@ -116,9 +119,10 @@ void* ServerThread::run() {
 				/* if user is present (threadlist) then send to its queue,
 				 * else call the currentUser.dumpMessageTo(targetUser)
 				 */
-				MessageSendPackage package = buff;
-
+				memset(buff, 0, sizeof(buff));
 				socket->receive(buff, sizeof(buff));
+
+				MessageSendPackage package = buff;
 
 				string name = package.getReceiver();
 				time_t msgTime = package.getPackageTime();
@@ -132,7 +136,6 @@ void* ServerThread::run() {
 						temp->broadcast(currentUser,msg);
 						SimpleMessagePackage reply(Protocol::messageSendSuccess);
 						reply.send(*socket);
-
 					}
 				} else { //to user
 					if(User::isUserExists(name)) {
@@ -161,6 +164,8 @@ void* ServerThread::run() {
 					} else {
 						//send it does not exist
 						SimpleMessagePackage reply(Protocol::messageSendFailed);
+						reply.setMessage("User " + name + " does not exist!");
+
 						reply.send(*socket);
 					}
 				}
@@ -182,28 +187,36 @@ void* ServerThread::run() {
 			} else if (currentPackage.getPackageType() == Protocol::groupJoin) {
 				/* User join group */
 				// flush
+				cout << "Masuk?" << endl;
 				socket->receive(buff, sizeof(buff));
+				//socket->receive(buff, sizeof(buff));
 
 				GroupJoinPackage package = buff;
 
-				if(Group::isGroupExists(package.getGroupName())) {
-					Group* group = Group::getGroup(package.getGroupName());
+				string groupName = package.getGroupName();
+				if(Group::isGroupExists(groupName)) {
+					cout << "Group " << groupName << " exists!" << endl;
+
+					Group* group = Group::getGroup(groupName);
 					if(group->checkMembership(currentUser)) {
+						cout << "already in group!" << endl;
 						SimpleMessagePackage response(Protocol::groupJoinFail);
 
-						response.setMessage("Already joined in group " + group->getGroupName());
+						response.setMessage("Already joined in group " + groupName);
 						response.send(*socket);
 					} else {
+						cout << "Join success!" << endl;
 						group->joinGroup(currentUser);
 
 						Package response(Protocol::groupJoinSuccess);
 
-						response.send(*socket);
+						socket->send(response);
 					}
 				} else {
+					cout << "Group " << groupName << " does not exist!" << endl;
 					SimpleMessagePackage response(Protocol::groupJoinFail);
 
-					response.setMessage("Group " + package.getGroupName() + " does not exist");
+					response.setMessage("Group " + groupName + " does not exist");
 					response.send(*socket);
 				}
 			} else if (currentPackage.getPackageType() == Protocol::groupLeave) {
@@ -236,15 +249,21 @@ void* ServerThread::run() {
 			} else if(currentPackage.getPackageType() == Protocol::messageRecvRequest) {
 				// flush
 				socket->receive(buff, sizeof(buff));
+				SimpleMessagePackage requestPackage(buff);
+
 				if(!currentUser.unseenMessage.empty()) {
 					while(!currentUser.unseenMessage.empty()) {
 						struct Message ms;
 						ms = currentUser.unseenMessage[0];
 
-						MessageRecvPackage response(ms.sender, ms.time, ms.message);
-						response.send(*socket);
+						if(requestPackage.getMessage() == ms.sender) {
 
-						currentUser.unseenMessage.erase(currentUser.unseenMessage.begin());
+							MessageSendPackage response(ms.sender, ms.message);
+							response.resetTime();
+							response.send(*socket);
+
+							currentUser.unseenMessage.erase(currentUser.unseenMessage.begin());
+						}
 					}
 					Package last(Protocol::messageRecvEnd);
 

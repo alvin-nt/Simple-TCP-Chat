@@ -38,7 +38,8 @@ int main(void) {
 	string userName;
 
 	while(1) {
-		char buffer[512] = {};
+		char buffer[512];
+		memset(buffer, 0, sizeof(buffer));
 
 		cout << "> "; getline(cin, input);
 		if(input == "signup" && !isSignedIn) {
@@ -168,22 +169,23 @@ int main(void) {
 			messages = helper.fetchFromFile(showFromUser);
 
 			// pushback all fetched new message from server
-			Package request(Protocol::messageRecvRequest);
+			SimpleMessagePackage request(Protocol::messageRecvRequest);
+			request.setMessage(showFromUser);
 			request.send(*stream);
 
 			stream->receive(buffer, sizeof(buffer), MSG_PEEK);
 			// read the responses from here
-			MessageRecvPackage receivedMessage = buffer;
+			MessageSendPackage receivedMessage = buffer;
 
-			while (receivedMessage.getPackageType() == Protocol::messageRecv) {
-				MessageRecvPackage::receive(receivedMessage, *stream);
+			while (receivedMessage.getPackageType() == Protocol::messageSend) {
+				MessageSendPackage::receive(receivedMessage, *stream);
 
 				char buff[100] = {};
-				time_t msgTime = receivedMessage.getMessageTime();
+				time_t msgTime = receivedMessage.getPackageTime();
 				strftime(buff, sizeof(buff), "%F %T", localtime(&msgTime));
 
-				string format = "[" + string() + buff +
-								" - " + receivedMessage.getMessageSender() + "]" +
+				string format = "[" + string(buff) +
+								" - " + receivedMessage.getReceiver() + "]" +
 								receivedMessage.getMessage();
 
 				messages.push_back(format);
